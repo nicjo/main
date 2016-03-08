@@ -8,20 +8,40 @@ var Link = ReactRouter.Link;
 var IndexRoute = ReactRouter.IndexRoute;
 var browserHistory = ReactRouter.browserHistory;
 
-// A simple navigation component
+import { default as update } from "react-addons-update";
+import { default as _ } from "lodash";
+
+import {GoogleMapLoader, GoogleMap, Marker, Circle, InfoWindow} from "react-google-maps";
+
+import {
+  default as canUseDOM,
+} from "can-use-dom";
+
+import { default as raf } from "raf";
+
+import { triggerEvent } from "react-google-maps/lib/utils";
+
+var geolocation = (
+  canUseDOM && navigator.geolocation || {
+    getCurrentPosition: (success, failure) => {
+      failure(`Your browser doesn't support geolocation.`);
+    },
+  }
+);
+
 var Navigation = React.createClass({
   render: function() {
     return (
       <nav className="main-menu">
         <ul>
           <li>
-            <Link to="/">Home</Link>
+            <Link to="/">Plot Map</Link>
           </li>
           <li>
-            <Link to="/about">About Us</Link>
+            <Link to="/geo">Geo Map</Link>
           </li>
           <li>
-            <Link to="/team">Meet the team</Link>
+            <Link to="/simp">Simple Map</Link>
           </li>
         </ul>
       </nav>
@@ -29,8 +49,6 @@ var Navigation = React.createClass({
   }
 });
 
-// The main application layout
-// this.props.children will be set by React Router depending on the current route
 var App = React.createClass({
   render: function() {
     return (
@@ -42,41 +60,225 @@ var App = React.createClass({
   }
 });
 
-// home "page"
-var Home = React.createClass({
+var Geolocation = React.createClass ({
+
+  getInitialState: function() {
+    return {
+    center: null,
+    content: null,
+    radius: 6000,
+    crumbs: [],
+    }
+  },
+  
+  addCrumb: function(crumb) {
+    var crumbs = this.state.crumbs;
+    crumbs.push(crumb);
+    this.forceUpdate();
+    
+  },
+  
+  /*touchMap: function(e) {
+    
+  },*/
+  
+  componentDidMount: function() {
+    geolocation.getCurrentPosition((position) => {
+      this.setState({
+        center: {
+          lat: position.coords.latitude,
+          lng: position.coords.longitude,
+        },
+        content: `Location found using HTML5.`,
+      });
+
+      const tick = () => {
+        this.setState({ radius: Math.max(this.state.radius - 20, 0) });
+
+        if (this.state.radius > 100) {
+          raf(tick);
+        }
+      };
+      raf(tick);
+    }, (reason) => {
+      this.setState({
+        center: {
+          lat: 60,
+          lng: 105,
+        },
+        content: `Error: The Geolocation service failed (${ reason }).`,
+      });
+    });
+  },
   render: function() {
+    
+    const { center, content, radius } = this.state;
+    let contents = [];
+
+    if (center) {
+      contents = contents.concat([
+        (<InfoWindow key="info" position={center} content={content} />),
+        (<Circle key="circle" center={center} radius={radius} options={{
+          fillColor: `red`,
+          fillOpacity: 0.20,
+          strokeColor: `red`,
+          strokeOpacity: 1,
+          strokeWeight: 1,
+        }}
+        />),
+      ]);
+    }
+
     return (
-      <div>
-        <h1>Homepage!</h1>
-        <p>Welcome to the homepage! Try to click on a link in the nav, then click the browser's back button.</p>
-      </div>
+        <GoogleMap
+          containerProps={{
+            ...this.props,  //requires stage-2 preset
+            style: {
+              height: `100vh`,
+            },
+          }}
+          defaultZoom={17}
+          center={center}
+          onClick={this.addCrumb}
+        >
+          {contents}
+        </GoogleMap>
     );
   }
 });
 
-// about "page"
-var About = React.createClass({
+var SimpleMap = React.createClass({
+  
   render: function() {
-    return (
-      <div>
-        <h1>About Page!</h1>
-        <p>Welcome to the about page!</p>
-      </div>
-    );
-  }
-});
+    // var that = this;
+      return (
+    <section style={{height: "100vh"}}>
+      <GoogleMapLoader
+        containerElement={
+          <div
+            {...this.props}
+            style={{
+              height: "100%",
+            }}
+          />
+        }
+        googleMapElement={
+          <GoogleMap
+          
+            ref={(map) => console.log(map)}
+            defaultZoom={12}
+            defaultCenter={{lat: 45.5088400, lng: -73.5878100}}
+            // onClick={::this.handleMapClick}>
+            >
+            
+            {/*{that.state.markers.map((marker, index) => {
+              return (
+                <Marker
+                  {...marker}
+                  onRightclick={that.handleMarkerRightclick.bind(that, index)} />
+              );
+            })}*/}
+          </GoogleMap>
+        }
+      />
+    </section>
+  );
+  }  
+  
+})
 
-// team "page"
-var Team = React.createClass({
+var Markers = React.createClass({
+    getInitialState: function() {
+      return {
+        markers: [{
+      position: {
+        lat: 25.0112183,
+        lng: 121.52067570000001,
+      },
+      key: `Montreal`,
+      defaultAnimation: 2,
+    }]
+    };
+    },
+    
+  componentDidMount: function() {
+    if (!canUseDOM) {
+      return;
+    }
+    window.addEventListener(`resize`, this.handleWindowResize);
+  },
+  componentWillUnmount: function() {
+    if (!canUseDOM) {
+      return;
+    }
+    window.removeEventListener('resize', this.handleWindowResize);
+  }, 
+  
+  handleMapClick: function(e) {
+    let { markers } = this.state;
+    markers = update(markers, {
+      $push: [
+        {
+          position: {lat: e.latLng.lat(), lng: e.latLng.lng()},
+          key: Date.now()
+        },
+      ],
+    });
+    this.setState({ markers });
+    
+    /*if (markers.length === 3) {
+      this.props.toast(
+        `Right click on the marker to remove it`,
+        `Also check the code!`
+      );
+    }*/
+  },
+  handleMarkerRightclick: function(i,e) {
+    let { markers } = this.state;
+    markers = update(markers, {
+      $splice: [
+        [i, 1],
+      ],
+    });
+    this.setState({ markers });
+  },
   render: function() {
     return (
-      <div>
-        <h1>Meet the team!</h1>
-        <p>Welcome to the team page!</p>
-      </div>
+      <GoogleMapLoader
+        containerElement={
+          <div
+            {...this.props}
+            style={{
+              height: `100vh`,
+            }}
+          />
+        }
+        googleMapElement={
+          <GoogleMap
+            ref={(map) => (this._googleMapComponent = map) && console.log(map.getZoom())}
+            defaultZoom={3}
+            defaultCenter={{ lat: -25.363882, lng: 131.044922 }}
+            onClick={this.handleMapClick}
+            
+          >
+            {this.state.markers.map((marker, index) => {
+              return (
+                <Marker
+                  {...marker}
+                  onRightclick={this.handleMarkerRightclick.bind(this, index)}
+                />
+              );
+            })}
+          </GoogleMap>
+        }
+      />
     );
   }
-});
+  
+  
+})
+
+
 
 // not found "page"
 var NotFound = React.createClass({
@@ -86,7 +288,6 @@ var NotFound = React.createClass({
     );
   }
 });
-
 /*
 The routes. This section says:
   - If the route starts with /, load the App component
@@ -95,21 +296,18 @@ The routes. This section says:
   - If the route is /team, load the Team component INSIDE App as this.props.children
   - If the route is /about, load the About component INSIDE App as this.props.children
   - If the route is anything else, load the NotFound component INSIDE App as this.props.children
-
 The whole process lets us create **complex, nested user interfaces** with minimal effort,
 by simply nesting `Route` components.
 */
-
 var routes = (
   <Router history={browserHistory}>
     <Route path="/" component={App}>
-      <IndexRoute component={Home}/>
-      <Route path="about" component={About}/>
-      <Route path="team" component={Team}/>
+      <IndexRoute component={Markers}/>
+      <Route path="geo" component={Geolocation}/>
+      <Route path="simp" component={SimpleMap}/>
       <Route path="*" component={NotFound}/>
     </Route>
   </Router>
 );
-
 // If this line of code is not here, nothing gets displayed!
 ReactDOM.render(routes, document.querySelector('#app'));
