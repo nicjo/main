@@ -66,7 +66,7 @@ var Geolocation = React.createClass ({
     return {
     center: null,
     content: null,
-    radius: 6000,
+    radius: 60,
     crumbs: [],
     }
   },
