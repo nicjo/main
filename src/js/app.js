@@ -35,14 +35,18 @@ var Navigation = React.createClass({
       <nav className="main-menu">
         <ul>
           <li>
-            <Link to="/">Plot Map</Link>
+            <Link to="/">Home</Link>
           </li>
           <li>
-            <Link to="/geo">Geo Map</Link>
+            <Link to="/create">Plot Map</Link>
           </li>
           <li>
-            <Link to="/simp">Simple Map</Link>
+            <Link to="/list">Path List</Link>
           </li>
+          <li>
+            <Link to="/view/:id">Choose Path</Link>
+          </li>
+          <li>FUTURE: near m/in use</li>
         </ul>
       </nav>
     );
@@ -187,7 +191,7 @@ var SimpleMap = React.createClass({
   
 })
 
-var Markers = React.createClass({
+var PlotMap = React.createClass({
     getInitialState: function() {
       return {
         markers: [{
@@ -278,6 +282,28 @@ var Markers = React.createClass({
   
 })
 
+var Home = React.createClass({
+  
+  render: function() {
+    return <p>HOME</p>
+  }
+})
+var PathList = React.createClass({
+  
+  render: function() {
+    return <p>Path List</p>
+  }
+})
+var PathView = React.createClass({
+  
+  render: function() {
+    return <p>Path View</p>
+  }
+  
+  
+})
+
+
 
 
 // not found "page"
@@ -302,9 +328,10 @@ by simply nesting `Route` components.
 var routes = (
   <Router history={browserHistory}>
     <Route path="/" component={App}>
-      <IndexRoute component={Markers}/>
-      <Route path="geo" component={Geolocation}/>
-      <Route path="simp" component={SimpleMap}/>
+      <IndexRoute component={Home}/>
+      <Route path="create" component={PlotMap}/>
+      <Route path="list" component={PathList}/>
+      <Route path="view/:id" component={PathView}/>
       <Route path="*" component={NotFound}/>
     </Route>
   </Router>
