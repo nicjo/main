@@ -232,8 +232,9 @@ var PlotMap = React.createClass({
           lng: -73.5878100,
         },
         key: `Montreal`,
-        defaultAnimation: 2,
-      }]
+        defaultAnimation: 1,
+      }],
+      center: {}
     };
   },
 
@@ -242,6 +243,16 @@ var PlotMap = React.createClass({
       return;
     }
     window.addEventListener(`resize`, this.handleWindowResize);
+    var center= {}
+    geolocation.getCurrentPosition((position) => {
+          this.setState({
+            center: {
+              lat: position.coords.latitude,
+              lng: position.coords.longitude,
+            }
+          })
+    })
+    this.setState({center:center})
   },
   componentWillUnmount: function() {
     if (!canUseDOM) {
@@ -263,8 +274,8 @@ var PlotMap = React.createClass({
       googleMapElement = {
         <GoogleMap
             ref={(map) => (this._googleMapComponent = map)}
-            defaultZoom={16}
-            defaultCenter={{ lat: 45.5088400, lng: -73.5878100 }}
+            defaultZoom={20}
+            center= {this.state.center}
             onClick={this.props.onClick}
             
           >
@@ -272,6 +283,8 @@ var PlotMap = React.createClass({
               return (
                 <Marker
                   {...crumb}
+                  animation= 'google.maps.Animation.DROP'
+                  icon= '../icons/Bags_of_Breadcrumbs-icon.png'
                   onRightclick={this.props.onRightClick.bind(null, index)} //.bind(this, index) now passed to onRightclick call
                 />
               );
@@ -286,7 +299,14 @@ var PlotMap = React.createClass({
 var Home = React.createClass({
 
   render: function() {
-    return <p>HOME</p>
+    return (
+      <div>
+        <button><Link to="/create">Create a Path</Link></button>
+        <button><Link to="/list">View Paths</Link></button>
+        <img src="../icons/birdy.png"/>
+      </div>
+      
+      )
   }
 });
 var PathList = React.createClass({
@@ -310,7 +330,7 @@ var PlotPage = React.createClass({
    return {
      title: 'untitled',
      bcrumbs: [],
-     crumbs: []
+     crumbs: [],
    }
   },
   handleKey: function(e) {
@@ -354,7 +374,8 @@ var PlotPage = React.createClass({
     
     console.log(crumbs)
     this.setState({
-      crumbs: crumbs
+      crumbs: crumbs,
+      center: {}
     });
     // this.bcrumbs = {crumbs};
     /*if (crumbs.length === 3) {
