@@ -162,13 +162,75 @@ var PathList = React.createClass ({
   }
 })
 
-
+// Component that renders the view for a selected path from the PathList component.
+// At the time of this writting, it centers on the first latlng. 
 var PathView = React.createClass({
+    getInitialState: function(){
+      return {
+        markers: []
+      }
+    },
+
+    componentWillMount: function(){
+      var id = this.props.params.id;
+     var newMarkers = pathData.filter(function(point){
+        if (point.id === Number(id)) {
+          return point
+        }
+      })
+
+      this.setState({
+        markers: newMarkers
+      })
+    },
+    
+    // handleClick: function(){
+    // this.setState({
+    //   zoom: 20,
+    // });
+    // },
   
-  render: function() {
-    return <p>Path View</p>
-  }
-  
+    render: function() {
+    let { id } = this.props.params
+    
+    console.log(this.state.markers);
+
+    var image = 'https://assets.shop.loblaws.ca/products/20184282002/b1/en/front/20184282002_front_a01.png';
+      return (
+        <div>
+            {/*<h1> this it the ID: {id}</h1>*/}
+            <section style={{height: "100vh"}}>
+                <GoogleMapLoader
+                  containerElement={
+                    <div
+                      {...this.props}
+                      style={{
+                        height: "100%",
+                      }}
+                    />
+                  }
+                  googleMapElement={
+                    <GoogleMap
+                    
+                      ref={(map) => console.log(map)}
+                      defaultZoom={18}
+                      defaultCenter={this.state.markers[0].points[0]}
+                      >
+                      {this.state.markers.map(function (marker, index) {
+                      
+                        return marker.points.map(function (soloMarker) {
+                        //soloMarker is an object with a lng and lat
+                          return (<Marker position={{ lat: soloMarker.lat, lng: soloMarker.lng }} title="Oh, Hello!" icon={image} />)
+                        })
+                        
+                      })}
+                    </GoogleMap>
+                  }
+                />
+            </section>
+        </div>
+  );
+  }  
   
 })
 
@@ -261,8 +323,11 @@ var Geolocation = React.createClass ({
   }
 });
 
+
+
 var SimpleMap = React.createClass({
   
+
   render: function() {
     // var that = this;
       return (
@@ -282,16 +347,9 @@ var SimpleMap = React.createClass({
             ref={(map) => console.log(map)}
             defaultZoom={12}
             defaultCenter={{lat: 45.5088400, lng: -73.5878100}}
-            // onClick={::this.handleMapClick}>
+            
             >
             
-            {/*{that.state.markers.map((marker, index) => {
-              return (
-                <Marker
-                  {...marker}
-                  onRightclick={that.handleMarkerRightclick.bind(that, index)} />
-              );
-            })}*/}
           </GoogleMap>
         }
       />
@@ -428,6 +486,7 @@ var routes = (
     <Route path="/" component={App}>
       <IndexRoute component={Home}/>
       <Route path="create" component={PlotMap}/>
+      <Route path="test" component={SimpleMap}/>
       <Route path="list" component={PathList}/>
       <Route path="view/:id" component={PathView}/>
       <Route path="*" component={NotFound}/>
