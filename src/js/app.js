@@ -146,19 +146,6 @@ var pathData = [
     }
   ]
   
-
-// var listicle = pathData.map(function(obj){
-//                       var rObj = {};
-//                       rObj = obj.title;
-//                       return React.DOM.li({className: 'listItem'}, null, rObj)
-//                     });
-
-
-// var listicle = pathData.map(function(obj){
-//                       var link = "/view/" + obj.id
-//                       return (<li key={obj.id} className="listItem"><a href={link}>{obj.title}</a></li>)
-//                     });
-
 var PathList = React.createClass ({
   
   render: function(Data) {
@@ -167,7 +154,7 @@ var PathList = React.createClass ({
         <p>Derpington</p>
         <ul className="path-list">
           {pathData.map(item => (
-              <li key={item.id} className="listItem"><Link to={`/view/${item.id}`}>{item.title}</Link></li>
+              <li key={item.id} className="listItem"><Link to={`/view/${item.id}`}><button className="itemButton">{item.title}</button></Link></li>
             ))}
         </ul>
       </div>
