@@ -237,22 +237,33 @@ var PlotMap = React.createClass({
       center: {}
     };
   },
-
+  
+  componentWillReceiveProps: function(props){
+    this.setState({
+      center: props.center
+    })
+  },
   componentDidMount: function() {
     if (!canUseDOM) {
       return;
     }
     window.addEventListener(`resize`, this.handleWindowResize);
-    var center= {}
-    geolocation.getCurrentPosition((position) => {
-          this.setState({
+    console.log(this.props.center)
+    console.log("THIS BE PROPS")
+    if(!this.props.center.lng){
+      geolocation.getCurrentPosition((position) => {
+      
+      this.setState({
             center: {
               lat: position.coords.latitude,
               lng: position.coords.longitude,
             }
           })
+          
     })
-    this.setState({center:center})
+    }
+      
+    
   },
   componentWillUnmount: function() {
     if (!canUseDOM) {
@@ -276,6 +287,8 @@ var PlotMap = React.createClass({
             ref={(map) => (this._googleMapComponent = map)}
             defaultZoom={20}
             center= {this.state.center}
+            // onGeoUpdate={true}
+            // autoUpdate= {false}
             onClick={this.props.onClick}
             
           >
@@ -331,6 +344,7 @@ var PlotPage = React.createClass({
      title: 'untitled',
      bcrumbs: [],
      crumbs: [],
+     center: {}
    }
   },
   handleKey: function(e) {
@@ -356,9 +370,10 @@ var PlotPage = React.createClass({
 
   },
   handleMapClick: function(e) {
+    // e.stopPropagation();
     
     if(e.latLng){
-      
+ 
       let {crumbs} = this.state ///ES6 destructuring === var crumbs = this.state.crumbs
     //in ES5->
     crumbs.push({position: {lat: e.latLng.lat(), lng: e.latLng.lng()}, key: Date.now()})
@@ -372,10 +387,14 @@ var PlotPage = React.createClass({
       }, ],
     });*/
     
-    console.log(crumbs)
+    // console.log(crumbs)
+    
+    var center = {lat:this.state.crumbs[this.state.crumbs.length-1].position.lat, lng:this.state.crumbs[this.state.crumbs.length-1].position.lng}
+
+    
     this.setState({
       crumbs: crumbs,
-      center: {}
+      center: center
     });
     // this.bcrumbs = {crumbs};
     /*if (crumbs.length === 3) {
@@ -389,7 +408,7 @@ var PlotPage = React.createClass({
   },
   handleCrumbRightClick: function(i) {
     
-    console.log(i);
+    //console.log(i);
     
     var crumbs = this.state.crumbs;
     crumbs.splice(i,1);
@@ -414,7 +433,7 @@ var PlotPage = React.createClass({
           <p>{formtitle}</p>
           <input onKeyUp={this.handleKey} type="text" name="pathTitle" ref= "title" placeholder="Name your path"/>
         </form>
-       <PlotMap crumbs={this.state.crumbs} onClick= {this.handleMapClick} onRightClick= {this.handleCrumbRightClick}/>
+       <PlotMap center={this.state.center} crumbs={this.state.crumbs} onClick= {this.handleMapClick} onRightClick= {this.handleCrumbRightClick}/>
        <button onClick={this.handleClick}>Create</button>
      </div>
     )
