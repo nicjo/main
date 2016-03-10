@@ -1,5 +1,6 @@
 var React = require('react');
 var ReactDOM = require('react-dom');
+var Component = React.Component;
 
 var ReactRouter = require('react-router');
 var Router = ReactRouter.Router;
@@ -42,9 +43,6 @@ var Navigation = React.createClass({
           </li>
           <li>
             <Link to="/list">Path List</Link>
-          </li>
-          <li>
-            <Link to="/view/:id">Choose Path</Link>
           </li>
           <li>FUTURE: near m/in use</li>
         </ul>
@@ -167,7 +165,8 @@ var PathList = React.createClass ({
 var PathView = React.createClass({
     getInitialState: function(){
       return {
-        markers: []
+        markers: [],
+        zoom: 10
       }
     },
 
@@ -175,6 +174,7 @@ var PathView = React.createClass({
       var id = this.props.params.id;
      var newMarkers = pathData.filter(function(point){
         if (point.id === Number(id)) {
+          // console.log(point)
           return point
         }
       })
@@ -182,23 +182,47 @@ var PathView = React.createClass({
       this.setState({
         markers: newMarkers
       })
+      
     },
     
-    // handleClick: function(){
-    // this.setState({
-    //   zoom: 20,
-    // });
-    // },
+  handleClick: function(event) {
+    this.setState({zoom: 20})
+  },
+  
+  // handleMapClick: function(e) {
+  //   let { markers } = this.state;
+  //   markers = update(markers, {
+  //     $push: [
+  //       {
+  //         position: {lat: e.latLng.lat(), lng: e.latLng.lng()},
+  //         key: Date.now()
+  //       },
+  //     ],
+  //   });
+  //   this.setState({ markers });
+    
+  //   /*if (markers.length === 3) {
+  //     this.props.toast(
+  //       `Right click on the marker to remove it`,
+  //       `Also check the code!`
+  //     );
+  //   }*/
+  // },
   
     render: function() {
-    let { id } = this.props.params
-    
+    let { id } = this.props.params;
     console.log(this.state.markers);
-
-    var image = 'https://assets.shop.loblaws.ca/products/20184282002/b1/en/front/20184282002_front_a01.png';
+    var zoom = this.state.zoom;
+    // var center = this.state.center;
+    // console.log(center);
+    // var image = 'https://assets.shop.loblaws.ca/products/20184282002/b1/en/front/20184282002_front_a01.png';
+    // var image = 'http://vignette1.wikia.nocookie.net/dofus/images/c/cb/Cereal_Bread.png';
+    // var image = 'http://www.clker.com/cliparts/f/6/0/3/12986123191438521207toast.png';
+    var image = 'https://bredcrumbz-nicjo.c9users.io/images/bread-cat-72px.png';
+    
       return (
         <div>
-            {/*<h1> this it the ID: {id}</h1>*/}
+            <h1>{this.state.markers[0].title}</h1>
             <section style={{height: "100vh"}}>
                 <GoogleMapLoader
                   containerElement={
@@ -209,31 +233,34 @@ var PathView = React.createClass({
                       }}
                     />
                   }
+                  
                   googleMapElement={
                     <GoogleMap
-                    
+                      onClick={this.handleClick}
                       ref={(map) => console.log(map)}
-                      defaultZoom={18}
+                      zoom={zoom}
                       defaultCenter={this.state.markers[0].points[0]}
+                      // center={center}
                       >
+                      
                       {this.state.markers.map(function (marker, index) {
                       
                         return marker.points.map(function (soloMarker) {
+                        
                         //soloMarker is an object with a lng and lat
                           return (<Marker position={{ lat: soloMarker.lat, lng: soloMarker.lng }} title="Oh, Hello!" icon={image} />)
                         })
-                        
                       })}
                     </GoogleMap>
                   }
                 />
             </section>
+            <button className="locate">Find Me!</button>
         </div>
   );
   }  
   
 })
-
 
 
 var Geolocation = React.createClass ({
@@ -322,7 +349,6 @@ var Geolocation = React.createClass ({
     );
   }
 });
-
 
 
 var SimpleMap = React.createClass({
