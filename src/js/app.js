@@ -37,6 +37,8 @@ import {
 }
 from "react-google-maps/lib/utils";
 
+var request = require('superagent');
+
 var geolocation = (
   canUseDOM && navigator.geolocation || {
     getCurrentPosition: (success, failure) => {
@@ -366,14 +368,61 @@ var PlotPage = React.createClass({
       points: this.state.crumbs
     }
     console.log(path);
+    request.post('/create')
+        .send(path) //send back an object
+        .end(function(err, res){
+          console.log("the request is: "+request)
+       if (err || !res.ok) {
+         alert('Oh no! error');
+       } else {
+         alert('yay got ' + JSON.stringify(res.body));
+       }
+     });
+    
     this.setState({
       crumbs: [],
       title: "untitled"
     })
     
-    browserHistory.push("/list");
+    //browserHistory.push("/list");
 
   },
+  /////////////////////////////////////////////
+/*       sendComment: function (e) {
+        e.preventDefault();
+
+        var comment = this.refs.textInput.value;
+        var id = this.refs.contentInput.value;
+
+        //var f = require('isomorphic-fetch');
+
+        var that = this; // why are we doing this??? IF YOU DO NOT KNOW PLEASE ASK!!
+
+        f('/createComment', {
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
+            },
+            body: serialize({commentText: comment, contentId: id}), // this encodes to text=hello+world&contentId=123
+            method: 'POST',
+            credentials: 'same-origin' // this will send our cookies
+        }).then
+        
+        request.post('/user')
+          .send({ name: 'tj', pet: 'tobi' })
+          .end(callback)
+        request
+          .post('/api/pet')
+          .send({ name: 'Manny', species: 'cat' })
+          .set('X-API-Key', 'foobar')
+          .set('Accept', 'application/json')
+          .end(function(err, res){
+            // Calling the end function will send the request 
+          });
+          request.get(url, function(response){
+  console.log('Response ok:', response.ok);
+  console.log('Response text:', response.text);
+});*/
+  ////////////////////////////////////////////
   handleMapClick: function(e) {
     // e.stopPropagation();
     

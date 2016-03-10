@@ -1,6 +1,6 @@
 var Sequelize = require('sequelize');
 
-var db = new Sequelize('bred', 'ziad_saab', '', {
+var db = new Sequelize('bred', process.env.C9_USER, '', {
   host: 'localhost',
   dialect: 'mysql'
 });
@@ -17,7 +17,7 @@ var Point = db.define('point', {
 
 Path.hasMany(Point);
 
-db.sync(); // comment this line after the first run
+//db.sync(); // comment this line after the first run
 
 module.exports = {
     Path: Path,
