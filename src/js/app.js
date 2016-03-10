@@ -233,24 +233,21 @@ var PlotMap = React.createClass({
         },
         key: `Montreal`,
         defaultAnimation: 1,
-      }],
-      center: {}
+      }]
     };
   },
   
-  componentWillReceiveProps: function(props){
-    this.setState({
-      center: props.center
-    })
-  },
+  // componentWillReceiveProps: function(props){
+  //   this.setState({
+  //     center: props.center
+  //   })
+  // },
   componentDidMount: function() {
     if (!canUseDOM) {
       return;
     }
-    window.addEventListener(`resize`, this.handleWindowResize);
-    console.log(this.props.center)
+    // window.addEventListener(`resize`, this.handleWindowResize);
     console.log("THIS BE PROPS")
-    if(!this.props.center.lng){
       geolocation.getCurrentPosition((position) => {
       
       this.setState({
@@ -261,7 +258,7 @@ var PlotMap = React.createClass({
           })
           
     })
-    }
+    
       
     
   },
@@ -269,9 +266,16 @@ var PlotMap = React.createClass({
     if (!canUseDOM) {
       return;
     }
-    window.removeEventListener('resize', this.handleWindowResize);
+    // window.removeEventListener('resize', this.handleWindowResize);
   },
 
+  handleBoundsChanged: function() {
+    var center = this._googleMapComponent.getCenter();
+    this.state.center = {
+      lat: center.lat(),
+      lng: center.lng()
+    };
+  },
   render: function() {
     return ( < GoogleMapLoader containerElement = { < div {...this.props
         }
@@ -286,10 +290,11 @@ var PlotMap = React.createClass({
         <GoogleMap
             ref={(map) => (this._googleMapComponent = map)}
             defaultZoom={20}
-            center= {this.state.center}
+            center={this.state.center}
             // onGeoUpdate={true}
             // autoUpdate= {false}
             onClick={this.props.onClick}
+            onBoundsChanged={this.handleBoundsChanged}
             
           >
             {this.props.crumbs.map((crumb, index) => {
@@ -389,12 +394,11 @@ var PlotPage = React.createClass({
     
     // console.log(crumbs)
     
-    var center = {lat:this.state.crumbs[this.state.crumbs.length-1].position.lat, lng:this.state.crumbs[this.state.crumbs.length-1].position.lng}
+    // var center = {lat:this.state.crumbs[this.state.crumbs.length-1].position.lat, lng:this.state.crumbs[this.state.crumbs.length-1].position.lng}
 
     
     this.setState({
-      crumbs: crumbs,
-      center: center
+      crumbs: crumbs
     });
     // this.bcrumbs = {crumbs};
     /*if (crumbs.length === 3) {
