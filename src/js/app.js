@@ -9,18 +9,36 @@ var Link = ReactRouter.Link;
 var IndexRoute = ReactRouter.IndexRoute;
 var browserHistory = ReactRouter.browserHistory;
 
-import { default as update } from "react-addons-update";
-import { default as _ } from "lodash";
+import {
+  default as update
+}
+from "react-addons-update";
+import {
+  default as _
+}
+from "lodash";
 
-import {GoogleMapLoader, GoogleMap, Marker, Circle, InfoWindow} from "react-google-maps";
+import {
+  GoogleMapLoader, GoogleMap, Marker, Circle, InfoWindow
+}
+from "react-google-maps";
 
 import {
   default as canUseDOM,
-} from "can-use-dom";
+}
+from "can-use-dom";
 
-import { default as raf } from "raf";
+import {
+  default as raf
+}
+from "raf";
 
-import { triggerEvent } from "react-google-maps/lib/utils";
+import {
+  triggerEvent
+}
+from "react-google-maps/lib/utils";
+
+var request = require('superagent');
 
 var geolocation = (
   canUseDOM && navigator.geolocation || {
@@ -55,7 +73,7 @@ var App = React.createClass({
   render: function() {
     return (
       <main>
-        <Navigation/>
+        {/*<Navigation/>*/}
         {this.props.children}
       </main>
     );
@@ -330,232 +348,221 @@ var PathView = React.createClass({
 })
 
 
-var Geolocation = React.createClass ({
-
+var PlotMap = React.createClass({
   getInitialState: function() {
     return {
-    center: null,
-    content: null,
-    radius: 60,
-    crumbs: [],
-    }
-  },
-  
-  addCrumb: function(crumb) {
-    var crumbs = this.state.crumbs;
-    crumbs.push(crumb);
-    this.forceUpdate();
-    
-  },
-  
-  /*touchMap: function(e) {
-    
-  },*/
-  
-  componentDidMount: function() {
-    geolocation.getCurrentPosition((position) => {
-      this.setState({
-        center: {
-          lat: position.coords.latitude,
-          lng: position.coords.longitude,
+
+      crumbs: [{
+        position: {
+          lat: 45.5088400,
+          lng: -73.5878100,
         },
-        content: `Location found using HTML5.`,
-      });
-
-      const tick = () => {
-        this.setState({ radius: Math.max(this.state.radius - 20, 0) });
-
-        if (this.state.radius > 100) {
-          raf(tick);
-        }
-      };
-      raf(tick);
-    }, (reason) => {
-      this.setState({
-        center: {
-          lat: 60,
-          lng: 105,
-        },
-        content: `Error: The Geolocation service failed (${ reason }).`,
-      });
-    });
-  },
-  render: function() {
-    
-    const { center, content, radius } = this.state;
-    let contents = [];
-
-    if (center) {
-      contents = contents.concat([
-        (<InfoWindow key="info" position={center} content={content} />),
-        (<Circle key="circle" center={center} radius={radius} options={{
-          fillColor: `red`,
-          fillOpacity: 0.20,
-          strokeColor: `red`,
-          strokeOpacity: 1,
-          strokeWeight: 1,
-        }}
-        />),
-      ]);
-    }
-
-    return (
-        <GoogleMap
-          containerProps={{
-            ...this.props,  //requires stage-2 preset
-            style: {
-              height: `100vh`,
-            },
-          }}
-          defaultZoom={17}
-          center={center}
-          onClick={this.addCrumb}
-        >
-          {contents}
-        </GoogleMap>
-    );
-  }
-});
-
-var SimpleMap = React.createClass({
-  
-
-  render: function() {
-    // var that = this;
-      return (
-    <section style={{height: "100vh"}}>
-      <GoogleMapLoader
-        containerElement={
-          <div
-            {...this.props}
-            style={{
-              height: "100%",
-            }}
-          />
-        }
-        googleMapElement={
-          <GoogleMap
-          
-            ref={(map) => console.log(map)}
-            defaultZoom={12}
-            defaultCenter={{lat: 45.5088400, lng: -73.5878100}}
-            
-            >
-            
-          </GoogleMap>
-        }
-      />
-    </section>
-  );
-  }  
-  
-})
-
-var PlotMap = React.createClass({
-    getInitialState: function() {
-      return {
-        markers: [{
-      position: {
-        lat: 25.0112183,
-        lng: 121.52067570000001,
-      },
-      key: `Montreal`,
-      defaultAnimation: 2,
-    }]
+        key: `Montreal`,
+        defaultAnimation: 1,
+      }]
     };
-    },
-    
+  },
   componentDidMount: function() {
     if (!canUseDOM) {
       return;
     }
-    window.addEventListener(`resize`, this.handleWindowResize);
+    // window.addEventListener(`resize`, this.handleWindowResize);
+    console.log("THIS BE PROPS")
+      geolocation.getCurrentPosition((position) => {
+      
+      this.setState({
+            center: {
+              lat: position.coords.latitude,
+              lng: position.coords.longitude,
+            }
+          })
+          
+    })
+    
+      
+    
   },
   componentWillUnmount: function() {
     if (!canUseDOM) {
       return;
     }
-    window.removeEventListener('resize', this.handleWindowResize);
-  }, 
-  
-  handleMapClick: function(e) {
-    let { markers } = this.state;
-    markers = update(markers, {
-      $push: [
-        {
-          position: {lat: e.latLng.lat(), lng: e.latLng.lng()},
-          key: Date.now()
-        },
-      ],
-    });
-    this.setState({ markers });
-    
-    /*if (markers.length === 3) {
-      this.props.toast(
-        `Right click on the marker to remove it`,
-        `Also check the code!`
-      );
-    }*/
+    // window.removeEventListener('resize', this.handleWindowResize);
   },
-  handleMarkerRightclick: function(i,e) {
-    let { markers } = this.state;
-    markers = update(markers, {
-      $splice: [
-        [i, 1],
-      ],
-    });
-    this.setState({ markers });
+
+  handleBoundsChanged: function() {
+    var center = this._googleMapComponent.getCenter();
+    this.state.center = {
+      lat: center.lat(),
+      lng: center.lng()
+    };
   },
   render: function() {
-    
-    return (
-      <GoogleMapLoader
-        containerElement={
-          <div
-            {...this.props}
-            style={{
-              height: `100vh`,
-            }}
-          />
+
+    return ( < GoogleMapLoader containerElement = { < div {...this.props
         }
-        googleMapElement={
-          <GoogleMap
-            ref="map" 
-            defaultZoom={3}
-            defaultCenter={{ lat: -25.363882, lng: 131.044922 }}
-            onClick={this.handleMapClick}
+        style = {
+          {
+            height: `100vh`,
+          }
+        }
+        />
+      }
+      googleMapElement = {
+        <GoogleMap
             
+            ref={(map) => (this._googleMapComponent = map)}
+            defaultZoom={20}
+            center={this.state.center}
+            // onGeoUpdate={true}
+            // autoUpdate= {false}
+            onClick={this.props.onClick}
+            onBoundsChanged={this.handleBoundsChanged}
           >
-            {this.state.markers.map((marker, index) => {
+          
+            {this.props.crumbs.map((crumb, index) => {
               return (
                 <Marker
-                  {...marker}
-                  onRightclick={this.handleMarkerRightclick.bind(this, index)}
+                  {...crumb}
+                  animation= 'google.maps.Animation.DROP'
+                  icon= '../icons/Bags_of_Breadcrumbs-icon.png'
+                  onRightclick={this.props.onRightClick.bind(null, index)} //.bind(this, index) now passed to onRightclick call
                 />
               );
             })}
           </GoogleMap>
-        }
+      }
       />
     );
   }
-  
-  
-})
+});
 
 var Home = React.createClass({
-  
+
   render: function() {
-    return <p>HOME</p>
+    return (
+      <div>
+        <button><Link to="/create">Create a Path</Link></button>
+        <button><Link to="/list">View Paths</Link></button>
+        <img src="../icons/birdy.png"/>
+      </div>
+      
+      )
   }
 })
 
+var PlotPage = React.createClass({
+  // var title = 'untitled';
+  // var bcrumbs = [];
+  
+  getInitialState: function() {
+   return {
+     title: 'untitled',
+     bcrumbs: [],
+     crumbs: [],
+     center: {}
+   }
+  },
+  handleKey: function(e) {
+    var formtitle = 'untitled'
+    if (e.target.value.length>0) {
+      formtitle=e.target.value
+    };
+    this.setState({title: formtitle});
+  },
+  handleClick: function(e) {
+    e.preventDefault()
+    var path = {
+      title: this.state.title,
+      points: this.state.crumbs
+    }
+    console.log(path);
+    request.post('/create')
+        .send(path) //send back an object
+        .end(function(err, res){
+         
+       if (err || !res.ok) {
+         alert('Oh no! error');
+       } else {
+         alert('yay got ' + JSON.stringify(res.body));
+       }
+       browserHistory.push("/list");  /////////legit??
+     });
+    
+    this.setState({
+      crumbs: [],
+      title: "untitled"
+    })
+  },
+  handleMapClick: function(e) {
+    // e.stopPropagation();
+    
+    if(e.latLng){
+ 
+      let {crumbs} = this.state ///ES6 destructuring === var crumbs = this.state.crumbs
+    //in ES5->
+    crumbs.push({position: {lat: e.latLng.lat(), lng: e.latLng.lng()}, key: Date.now()})
+    /*crumbs = update(crumbs, {
+      $push: [{
+        position: {
+          lat: e.latLng.lat(),
+          lng: e.latLng.lng()
+        },
+        key: Date.now()
+      }, ],
+    });*/
+    
+    // console.log(crumbs)
+    
+    // var center = {lat:this.state.crumbs[this.state.crumbs.length-1].position.lat, lng:this.state.crumbs[this.state.crumbs.length-1].position.lng}
 
+    
+    this.setState({
+      crumbs: crumbs
+    });
+    // this.bcrumbs = {crumbs};
+    /*if (crumbs.length === 3) {
+      this.props.toast(
+        `Right click on the crumb to remove it`,
+        `Also check the code!`
+      );
+    }*/
+    }
+    
+  },
+  handleCrumbRightClick: function(i) {
+    
+    //console.log(i);
+    
+    var crumbs = this.state.crumbs;
+    crumbs.splice(i,1);
+    this.setState({crumbs:crumbs});
+    /*let {
+      crumbs
+    } = this.state;*/
+    /*crumbs = update(crumbs, {
+      $splice: [
+        [i, 1],
+      ],
+    });
+    this.setState({
+      crumbs
+    });*/
+  },
+  render: function() {
+    var formtitle = this.state.title;
+    return (
+      <div>
+        <form action="create">
+          <input className= "titleInput" onKeyUp={this.handleKey} type="text" name="pathTitle" ref= "title" placeholder="Name your path"/>
+        </form>
+       <PlotMap className= "map" center={this.state.center} crumbs={this.state.crumbs} onClick= {this.handleMapClick} onRightClick= {this.handleCrumbRightClick}/>
+       <button onClick={this.handleClick}>Create</button>
+     </div>
+    )
+  }
+});
 
-
-
-
-// not found "page"
+// not found "page" 
 var NotFound = React.createClass({
   render: function() {
     return (
@@ -575,16 +582,15 @@ The whole process lets us create **complex, nested user interfaces** with minima
 by simply nesting `Route` components.
 */
 var routes = (
-  <Router history={browserHistory}>
-    <Route path="/" component={App}>
-      <IndexRoute component={Home}/>
-      <Route path="create" component={PlotMap}/>
-      <Route path="test" component={SimpleMap}/>
-      <Route path="list" component={PathList}/>
-      <Route path="view/:id" component={PathView}/>
-      <Route path="*" component={NotFound}/>
-    </Route>
-  </Router>
+<Router history={browserHistory}>
+  <Route path="/" component={App}>
+    <IndexRoute component={Home}/>
+    <Route path="create" component={PlotPage}/>
+    <Route path="list" component={PathList}/>
+    <Route path="view/:id" component={PathView}/>
+    <Route path="*" component={NotFound}/>
+  </Route>
+</Router>
 );
 // If this line of code is not here, nothing gets displayed!
 ReactDOM.render(routes, document.querySelector('#app'));
