@@ -166,10 +166,10 @@ var PathView = React.createClass({
     getInitialState: function(){
       return {
         markers: [],
-        zoom: 10
+        zoom: 16
       }
     },
-
+// this gets the data for a specific path based on the ID which is passed through the query string (params)
     componentWillMount: function(){
       var id = this.props.params.id;
      var newMarkers = pathData.filter(function(point){
@@ -185,44 +185,51 @@ var PathView = React.createClass({
       
     },
     
+    // componentDidMount: function(){
+      
+    // },
+    
+    // Click event to zoom in on the current center. This will need to be updated and will have to work with the upcoming 'start' button
   handleClick: function(event) {
     this.setState({zoom: 20})
   },
   
-  // handleMapClick: function(e) {
-  //   let { markers } = this.state;
-  //   markers = update(markers, {
-  //     $push: [
-  //       {
-  //         position: {lat: e.latLng.lat(), lng: e.latLng.lng()},
-  //         key: Date.now()
-  //       },
-  //     ],
-  //   });
-  //   this.setState({ markers });
+  //this will be the button that geo-locates a user
+  handleLocateButton: function(e) {
     
-  //   /*if (markers.length === 3) {
-  //     this.props.toast(
-  //       `Right click on the marker to remove it`,
-  //       `Also check the code!`
-  //     );
-  //   }*/
-  // },
+  },
   
     render: function() {
+      console.log(this.__proto__)
+      console.log(this.refs.map)
+      
     let { id } = this.props.params;
-    console.log(this.state.markers);
+
     var zoom = this.state.zoom;
-    // var center = this.state.center;
-    // console.log(center);
-    // var image = 'https://assets.shop.loblaws.ca/products/20184282002/b1/en/front/20184282002_front_a01.png';
-    // var image = 'http://vignette1.wikia.nocookie.net/dofus/images/c/cb/Cereal_Bread.png';
-    // var image = 'http://www.clker.com/cliparts/f/6/0/3/12986123191438521207toast.png';
+
     var image = 'https://bredcrumbz-nicjo.c9users.io/images/bread-cat-72px.png';
     
+    var arr = this.state.markers[0].points;
+// console.log(arr);
+
+      var minResult = arr.reduce(function (a, b) {
+      return {
+              lat: Math.min(a.lat, b.lat),
+              lng: Math.min(a.lng, b.lng)
+             }
+      });
+      var maxResult = arr.reduce(function (a, b) {
+      return {
+              lat: Math.max(a.lat, b.lat),
+              lng: Math.max(a.lng, b.lng)
+             }
+      });
+// console.log(minResult, maxResult);
+
       return (
         <div>
             <h1>{this.state.markers[0].title}</h1>
+            <button className="startButton">Start!</button>
             <section style={{height: "100vh"}}>
                 <GoogleMapLoader
                   containerElement={
@@ -237,8 +244,9 @@ var PathView = React.createClass({
                   googleMapElement={
                     <GoogleMap
                       onClick={this.handleClick}
-                      ref={(map) => console.log(map)}
+                      ref={(map) => this._googleMapComponent = map}
                       zoom={zoom}
+                      fitBounds={[minResult, maxResult]}
                       defaultCenter={this.state.markers[0].points[0]}
                       // center={center}
                       >
@@ -350,7 +358,6 @@ var Geolocation = React.createClass ({
   }
 });
 
-
 var SimpleMap = React.createClass({
   
 
@@ -441,6 +448,7 @@ var PlotMap = React.createClass({
     this.setState({ markers });
   },
   render: function() {
+    
     return (
       <GoogleMapLoader
         containerElement={
@@ -453,7 +461,7 @@ var PlotMap = React.createClass({
         }
         googleMapElement={
           <GoogleMap
-            ref={(map) => (this._googleMapComponent = map) && console.log(map.getZoom())}
+            ref="map" 
             defaultZoom={3}
             defaultCenter={{ lat: -25.363882, lng: 131.044922 }}
             onClick={this.handleMapClick}
