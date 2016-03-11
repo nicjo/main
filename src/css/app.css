@@ -5,3 +5,34 @@ html {
 *, *::before, *::after {
   box-sizing: inherit;
 }
+
+#app {
+  display: flex;
+}
+input {
+/*  border: #000;
+  padding: 10px;
+  font-size: 1.2em;
+  width: 100%;
+  background: rgba(0, 0, 0, 0.47);*/
+}
+
+/*////////////////
+CREATE PAGE
+////////////////*/
+
+.titleInput {
+  border: #000;
+  padding: 10px;
+  font-size: 1.2em;
+  width: 100%;
+  background: rgba(228, 224, 224, 0.47);
+  z-index: 100;
+}
+
+/*.map {
+  position:absolute;
+  left:0px;
+  top:0px;
+  height: 100vh;
+}*/
