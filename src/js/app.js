@@ -141,8 +141,15 @@ var pathData = [
         {lat: 45.5232811, lng: -73.5950518},
         {lat: 45.5229541, lng: -73.5953414}
       ]
-    }
-  ]
+      },
+      {
+        id: 5,
+        title: "Last Map",
+        points: [
+          {lat: 45.5055555, lng: -73.5},
+      ]
+      }
+    ]
   
 var PathList = React.createClass ({
   
@@ -164,72 +171,124 @@ var PathList = React.createClass ({
 // At the time of this writting, it centers on the first latlng. 
 var PathView = React.createClass({
     getInitialState: function(){
+      var centerLat = (45.5);
+      var centerLng = (73.5);
       return {
         markers: [],
-        zoom: 16
+        zoom: 16,
+        center: {lat: centerLat, lng: centerLng}
       }
     },
 // this gets the data for a specific path based on the ID which is passed through the query string (params)
     componentWillMount: function(){
       var id = this.props.params.id;
-     var newMarkers = pathData.filter(function(point){
+     var path = pathData.filter(function(point){
         if (point.id === Number(id)) {
           // console.log(point)
           return point
         }
-      })
+      })[0]
 
       this.setState({
-        markers: newMarkers
+        path: path
       })
       
     },
     
-    // componentDidMount: function(){
-      
-    // },
-    
-    // Click event to zoom in on the current center. This will need to be updated and will have to work with the upcoming 'start' button
-  handleClick: function(event) {
-    this.setState({zoom: 20})
+   fitBounds: function(){
+     if (!this._googleMapComponent || this.state.started) {
+       return;
+     }
+     
+    var bounds = new google.maps.LatLngBounds();
+    this.state.path.points.forEach(
+      function(point) {
+        bounds.extend(new google.maps.LatLng(point.lat, point.lng));
+      }
+    );
+    this._googleMapComponent.fitBounds(bounds);
   },
   
   //this will be the button that geo-locates a user
-  handleLocateButton: function(e) {
-    
+  handleLocateButton: function() {
+    geolocation.getCurrentPosition((position) => {
+      this._googleMapComponent.panTo({
+        lat: position.coords.latitude,
+        lng: position.coords.longitude
+      });
+    }, (reason) => {
+        content: `Error: The Geolocation service failed (${ reason }).`
+      });
   },
   
+  
+  
+  //this will 'start' the map by centering on the first marker and changing its colour
+  handleStartButton: function(e) {
+    console.log(this.state.path.points[0])
+    this._googleMapComponent.panTo(this.state.path.points[0]);
+    this.setState({
+      started: true,
+      current: 0,
+      zoom: 20
+    });
+    // this.setState({
+    //   center: this.state.path.points[0],
+    //   zoom: 20,
+    //   started: true,
+    //   current: 0
+      
+    // })
+  },
+  
+    //this will 'start' the map by centering on the first marker and changing its colour
+  handleNextButton: function(e) {
+    
+    if (this.state.current === this.state.path.points.length - 1) {
+      alert("You finished the path!");
+      this.setState({
+        started: false,
+        current: undefined
+      });
+    } else {
+      this._googleMapComponent.panTo(this.state.path.points[this.state.current + 1]);
+    this.setState({
+      zoom: 20,
+      current: this.state.current + 1
+    })
+    }
+  },
+  
+  
     render: function() {
-      console.log(this.__proto__)
-      console.log(this.refs.map)
+      // console.log(this.__proto__)
+      // console.log(this.refs.map)
+      
+      var content = this.state.content
       
     let { id } = this.props.params;
 
     var zoom = this.state.zoom;
-
-    var image = 'https://bredcrumbz-nicjo.c9users.io/images/bread-cat-72px.png';
     
-    var arr = this.state.markers[0].points;
-// console.log(arr);
+    var center = this.state.center;
 
-      var minResult = arr.reduce(function (a, b) {
-      return {
-              lat: Math.min(a.lat, b.lat),
-              lng: Math.min(a.lng, b.lng)
-             }
-      });
-      var maxResult = arr.reduce(function (a, b) {
-      return {
-              lat: Math.max(a.lat, b.lat),
-              lng: Math.max(a.lng, b.lng)
-             }
-      });
-// console.log(minResult, maxResult);
+
+
+    // var image = (this.state.path.points[i] <= this.state.current ? 'https://bredcrumbz-nicjo.c9users.io/images/bread-cat-72px.png' : 'https://bredcrumbz-nicjo.c9users.io/images/NyanCat.gif');
+    var image = 'https://bredcrumbz-nicjo.c9users.io/images/bread-cat-72px.png';
+    var image2 = 'https://bredcrumbz-nicjo.c9users.io/images/NyanCat.gif';
+
+    // var image2 = for (var i in this.state.path.points) {
+    //                   if (this.state.path.points[i] <= this.state.current) {
+    //                             return 'https://bredcrumbz-nicjo.c9users.io/images/bread-cat-72px.png'} 
+    //                               else {return }
+    // }
 
       return (
         <div>
-            <h1>{this.state.markers[0].title}</h1>
-            <button className="startButton">Start!</button>
+            <h1>{this.state.path.title}</h1>
+            {this.state.started ? <button className="nextButton" onClick={this.handleNextButton}>Next!</button>  : <button className="startButton" onClick={this.handleStartButton}>Start!</button>}
+            <button className="locate" onClick={this.handleLocateButton}>Find Me!</button>
             <section style={{height: "100vh"}}>
                 <GoogleMapLoader
                   containerElement={
@@ -243,31 +302,31 @@ var PathView = React.createClass({
                   
                   googleMapElement={
                     <GoogleMap
-                      onClick={this.handleClick}
-                      ref={(map) => this._googleMapComponent = map}
+                      // onClick={this.handleClick}
+                      ref={(map) => {this._googleMapComponent = map; this.fitBounds(); }}
                       zoom={zoom}
-                      fitBounds={[minResult, maxResult]}
-                      defaultCenter={this.state.markers[0].points[0]}
-                      // center={center}
                       >
                       
-                      {this.state.markers.map(function (marker, index) {
+                      {
+                        this.state.path.points.map((soloMarker, i) => (
+                          <Marker
+                            key={i}
+                            position={{ lat: soloMarker.lat, lng: soloMarker.lng }}
+                            title={`Position: ` + i}
+                            icon={(isFinite(this.state.current) ? this.state.current : -1) >= i ? image2 : image}
+                          />
+                        ))
+                      }
                       
-                        return marker.points.map(function (soloMarker) {
-                        
-                        //soloMarker is an object with a lng and lat
-                          return (<Marker position={{ lat: soloMarker.lat, lng: soloMarker.lng }} title="Oh, Hello!" icon={image} />)
-                        })
-                      })}
+                      
                     </GoogleMap>
                   }
                 />
             </section>
-            <button className="locate">Find Me!</button>
+            
         </div>
-  );
+    );
   }  
-  
 })
 
 
