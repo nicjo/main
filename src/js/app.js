@@ -75,155 +75,14 @@ var App = React.createClass({
   render: function() {
     return (
       <main>
-        <Navigation/>
+        {/*<Navigation/>*/}
         {this.props.children}
       </main>
     );
   }
 });
 
-var Geolocation = React.createClass({
 
-      getInitialState: function() {
-        return {
-          center: null,
-          content: null,
-          radius: 6000,
-          crumbs: [],
-        }
-      },
-
-      addCrumb: function(crumb) {
-        var crumbs = this.state.crumbs;
-        crumbs.push(crumb);
-        this.forceUpdate();
-
-      },
-
-      /*touchMap: function(e) {
-        
-      },*/
-
-      componentDidMount: function() {
-        geolocation.getCurrentPosition((position) => {
-          this.setState({
-            center: {
-              lat: position.coords.latitude,
-              lng: position.coords.longitude,
-            },
-            content: `Location found using HTML5.`,
-          });
-
-          const tick = () => {
-            this.setState({
-              radius: Math.max(this.state.radius - 20, 0)
-            });
-
-            if (this.state.radius > 100) {
-              raf(tick);
-            }
-          };
-          raf(tick);
-        }, (reason) => {
-          this.setState({
-            center: {
-              lat: 60,
-              lng: 105,
-            },
-            content: `Error: The Geolocation service failed (${ reason }).`,
-          });
-        });
-      },
-      render: function() {
-
-        const {
-          center, content, radius
-        } = this.state;
-        let contents = [];
-
-        if (center) {
-          contents = contents.concat([
-              (<InfoWindow key="info" position={center} content={content} />), ( < Circle key = "circle"
-                center = {
-                  center
-                }
-                radius = {
-                  radius
-                }
-                options = {
-                  {
-                    fillColor: `red`,
-                    fillOpacity: 0.20,
-                    strokeColor: `red`,
-                    strokeOpacity: 1,
-                    strokeWeight: 1,
-                  }
-                }
-                />),
-              ]);
-          }
-
-          return ( < GoogleMap containerProps = {
-              {
-                ...this.props, //requires stage-2 preset
-                  style: {
-                    height: `100vh`,
-                  },
-              }
-            }
-            defaultZoom = {
-              17
-            }
-            center = {
-              center
-            }
-            onClick = {
-              this.addCrumb
-            } > {
-              contents
-            } < /GoogleMap>
-          );
-        }
-      });
-
-var SimpleMap = React.createClass({
-
-  render: function() {
-    // var that = this;
-    return (
-      <section style={{height: "100vh"}}>
-  <GoogleMapLoader
-    containerElement={
-      <div
-        {...this.props}
-        style={{
-          height: "100%",
-        }}
-      />
-    }
-    googleMapElement={
-      <GoogleMap
-      
-        ref={(map) => console.log(map)}
-        defaultZoom={12}
-        defaultCenter={{lat: 45.5088400, lng: -73.5878100}}
-        // onClick={::this.handleMapClick}>
-        >
-        
-        {/*{that.state.crumbs.map((crumb, index) => {
-          return (
-            <Marker
-              {...crumb}
-              onRightclick={that.handleCrumbRightclick.bind(that, index)} />
-          );
-        })}*/}
-      </GoogleMap>
-    }
-  />
-</section>
-    );
-  }
-});
 
 var PlotMap = React.createClass({
   getInitialState: function() {
@@ -290,6 +149,7 @@ var PlotMap = React.createClass({
       }
       googleMapElement = {
         <GoogleMap
+            
             ref={(map) => (this._googleMapComponent = map)}
             defaultZoom={20}
             center={this.state.center}
@@ -299,6 +159,7 @@ var PlotMap = React.createClass({
             onBoundsChanged={this.handleBoundsChanged}
             
           >
+          
             {this.props.crumbs.map((crumb, index) => {
               return (
                 <Marker
@@ -371,58 +232,24 @@ var PlotPage = React.createClass({
     request.post('/create')
         .send(path) //send back an object
         .end(function(err, res){
-          console.log("the request is: "+request)
+         
        if (err || !res.ok) {
          alert('Oh no! error');
        } else {
          alert('yay got ' + JSON.stringify(res.body));
        }
+       browserHistory.push("/list");  /////////legit??
      });
     
     this.setState({
       crumbs: [],
       title: "untitled"
     })
+  
     
-    //browserHistory.push("/list");
+    
 
   },
-  /////////////////////////////////////////////
-/*       sendComment: function (e) {
-        e.preventDefault();
-
-        var comment = this.refs.textInput.value;
-        var id = this.refs.contentInput.value;
-
-        //var f = require('isomorphic-fetch');
-
-        var that = this; // why are we doing this??? IF YOU DO NOT KNOW PLEASE ASK!!
-
-        f('/createComment', {
-            headers: {
-                'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
-            },
-            body: serialize({commentText: comment, contentId: id}), // this encodes to text=hello+world&contentId=123
-            method: 'POST',
-            credentials: 'same-origin' // this will send our cookies
-        }).then
-        
-        request.post('/user')
-          .send({ name: 'tj', pet: 'tobi' })
-          .end(callback)
-        request
-          .post('/api/pet')
-          .send({ name: 'Manny', species: 'cat' })
-          .set('X-API-Key', 'foobar')
-          .set('Accept', 'application/json')
-          .end(function(err, res){
-            // Calling the end function will send the request 
-          });
-          request.get(url, function(response){
-  console.log('Response ok:', response.ok);
-  console.log('Response text:', response.text);
-});*/
-  ////////////////////////////////////////////
   handleMapClick: function(e) {
     // e.stopPropagation();
     
@@ -483,10 +310,9 @@ var PlotPage = React.createClass({
     return (
       <div>
         <form action="create">
-          <p>{formtitle}</p>
-          <input onKeyUp={this.handleKey} type="text" name="pathTitle" ref= "title" placeholder="Name your path"/>
+          <input className= "titleInput" onKeyUp={this.handleKey} type="text" name="pathTitle" ref= "title" placeholder="Name your path"/>
         </form>
-       <PlotMap center={this.state.center} crumbs={this.state.crumbs} onClick= {this.handleMapClick} onRightClick= {this.handleCrumbRightClick}/>
+       <PlotMap className= "map" center={this.state.center} crumbs={this.state.crumbs} onClick= {this.handleMapClick} onRightClick= {this.handleCrumbRightClick}/>
        <button onClick={this.handleClick}>Create</button>
      </div>
     )
