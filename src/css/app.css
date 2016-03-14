@@ -5,9 +5,14 @@ html {
 *, *::before, *::after {
   box-sizing: inherit;
 }
+html, body {
+  margin:0;
+}
 
 #app {
   display: flex;
+  height: 100vh;
+  width: 100vw;
 }
 input {
 /*  border: #000;
@@ -15,6 +20,9 @@ input {
   font-size: 1.2em;
   width: 100%;
   background: rgba(0, 0, 0, 0.47);*/
+}
+.main {
+  flex:1;
 }
 
 /*////////////////
@@ -29,10 +37,13 @@ CREATE PAGE
   background: rgba(228, 224, 224, 0.47);
   z-index: 100;
 }
-
-/*.map {
-  position:absolute;
-  left:0px;
-  top:0px;
+.map_div {
+  display: flex;
+  flex-direction: column;
+  width: 100vw;
   height: 100vh;
-}*/
+}
+
+.map {
+  flex: 1;
+}

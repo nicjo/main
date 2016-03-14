@@ -1,6 +1,6 @@
 //dependencies
 import React from "react";
-import {Link} from "react-router"
+import {Link} from "react-router";
 import request from "superagent";
 import {
   GoogleMapLoader, GoogleMap, Marker
@@ -8,7 +8,7 @@ import {
 from "react-google-maps";
 
 //our variables
-import geolocation from '../geolocation' 
+import geolocation from '../geolocation'; 
 
 
 export default React.createClass({

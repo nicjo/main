@@ -1,24 +1,13 @@
 //dependencies
 import React from "react";
-import {browserHistory} from "react-router"
+import {browserHistory} from "react-router";
 import request from "superagent";
-/*import {
-  GoogleMapLoader, GoogleMap, Marker
-}
-from "react-google-maps";*/
-// import {browserHistory} from ReactRouter.browserHistory;
-
-//our variables
-//import geolocation from '../geolocation' 
-
 
 //Child Components
 import PlotMap from "./PlotMap";
 
 export default React.createClass({
-  // var title = 'untitled';
-  // var bcrumbs = [];
-  
+
   getInitialState: function() {
    return {
      title: 'untitled',
@@ -48,7 +37,7 @@ export default React.createClass({
        if (err || !res.ok) {
          alert('Oh no! error');
        } 
-       browserHistory.push("/list");  /////////legit??
+       browserHistory.push("/list");  
      });
     
     this.setState({
@@ -112,9 +101,8 @@ export default React.createClass({
     });*/
   },
   render: function() {
-    var formtitle = this.state.title;
     return (
-      <div>
+      <div className="map_div">
         <form action="create">
           <input className= "titleInput" onKeyUp={this.handleKey} type="text" name="pathTitle" ref= "title" placeholder="Name your path"/>
         </form>
