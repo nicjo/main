@@ -50,7 +50,7 @@ import NotFound from "./components/NotFound";
 var App = React.createClass({
   render: function() {
     return (
-      <main>
+      <main className="main">
         {/*<Navigation/>*/}
         {this.props.children}
       </main>
