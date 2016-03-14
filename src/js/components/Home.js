@@ -4,10 +4,13 @@ export default React.createClass({
 
   render: function() {
     return (
-      <div>
-        <button><Link to="/create">Create a Path</Link></button>
-        <button><Link to="/list">View Paths</Link></button>
-        <img src="../icons/birdy.png"/>
+      <div className="homePage">
+        <div className="hPWhite">
+          <div className="emptyHP"></div>
+          <button className="homeButton"><Link to="/create">Create a Path</Link></button>
+          <button className="homeButton"><Link to="/list">View Paths</Link></button>
+          <div className="emptyHP"></div>
+        </div>  
       </div>
       
       )
