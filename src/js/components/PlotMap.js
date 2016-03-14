@@ -10,6 +10,7 @@ from "react-google-maps";
 //our variables
 import geolocation from '../geolocation' 
 
+import styles from '../styles';
 
 export default React.createClass({
   getInitialState: function() {
@@ -66,6 +67,10 @@ export default React.createClass({
             ref={(map) => (this._googleMapComponent = map)}
             defaultZoom={20}
             center={this.state.center}
+            //styles={{styles}}
+            defaultOptions={{
+          styles: styles,
+        }}
             // onGeoUpdate={true}
             // autoUpdate= {false}
             onClick={this.props.onClick}

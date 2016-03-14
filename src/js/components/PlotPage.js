@@ -102,12 +102,12 @@ export default React.createClass({
   },
   render: function() {
     return (
-      <div className="map_div">
+      <div className="plotPage">
         <form action="create">
           <input className= "titleInput" onKeyUp={this.handleKey} type="text" name="pathTitle" ref= "title" placeholder="Name your path"/>
         </form>
        <PlotMap className= "map" center={this.state.center} crumbs={this.state.crumbs} onClick= {this.handleMapClick} onRightClick= {this.handleCrumbRightClick}/>
-       <button onClick={this.handleClick}>Create</button>
+       <button className="create" onClick={this.handleClick}>Leave a trail</button>
      </div>
     )
   }
