@@ -5,3 +5,52 @@ html {
 *, *::before, *::after {
   box-sizing: inherit;
 }
+
+.mainDiv {
+  display: flex;
+  flex-direction: column;
+}
+
+.topDiv {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-content: flex-start;
+  align-items: stretch;
+}
+.bottomDiv {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-content: flex-start;
+  align-items: stretch;
+}
+
+.main-menu ul {
+  background-color: gray;
+}
+
+.main-menu ul li {
+  display: inline-block;
+  margin: 10px;
+  padding: 10px;
+  font-family: 'Roboto', sans-serif;
+  
+}
+
+h1 {
+  background-color: silver;
+  padding: 10px;
+  font-family: 'Roboto', sans-serif;
+  flex-grow: 1;
+  flex-basis: 100%;
+}
+
+button {
+  padding: 10px;
+  border: none;
+  background-color: pink;
+  flex-grow: 0;
+}
