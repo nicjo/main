@@ -1,6 +1,19 @@
 Nic and Hanna Drop BredCrumbz
 ================================================
-For this project, we are going to build a pizza ordering application with React. Optionally, our application will be able to communicate with the server to place the order! Unfortunately, no pizza will be had unless you make it yourself.
+
+A concise central function that creates paths (leaves a trail of breadcrumbs behind you or program manually). With lots of possible applications from the users side and many many extra features coming from the minds of the development team. 
+
+**Example use cases:**
+
+* If you're constantly hunting down your car after a movie or day shopping, set a breadcrumb trail from your spot to the elevators or main entrance of the complex that you can follow back at the end of the day.
+
+* Meeting friends at a festival, an amusement park, on the beach? Send them a path to where you set up camp (have them swing by the concession stand for you too, while you're at it).
+
+* Secret party? Exclusive sale? Pop-up exhibition? Invite your guests with a trail of 'Crumbz or send a path out as a promotional too. 
+
+
+
+**Resources used to begin the coding of this project:**
 
 Before getting started with the project, please take some time to read *and* understand the following articles:
 
@@ -36,7 +49,7 @@ Before getting started with the project, please take some time to read *and* und
 
 * [React router: a comprehensive introduction](https://www.themarketingtechnologist.co/react-router-an-introduction/)
 
-## Base structure
+**Base structure**
 Our application will be built to run in the browser. This means we will not be needing our own server nor database. However, **we need to serve our files somewhere**. For this reason, a tiny web server was created at `server.js`. All you have to do is run it with `node server.js`. You should not need to restart it nor modify it.
 
 This repository already contains a base structure to get you started:
@@ -55,131 +68,5 @@ This repository already contains a base structure to get you started:
 To start hacking on this project:
 
 1. `npm install`
-2. Start the server with `node server.js`
-3. Start Webpack with `webpack --watch`
-4. Start coding!
-
-## App specification
-This is a tiny specification of the app you will be building:
-
-### Routes
-The app will have the following routes:
-  *   `/`
-
-    Welcome page. On this page, you should welcome the user to your Pizza place and have a link to `/order`
-
-  *   `/order`
-
-    Order creation page. On this page, you will have a form for the user to enter their name, email, phone number and home address (street address, city, province and postal code). A "Next" button will be displayed. Upon clicking on "Next", you should remember the user's address somewhere and move to the next step
-
-  *   `/choose`
-
-    Pizza choosing page. On this page, the user will be able to choose among a variety of pizzas. You will present a list of pre-made pizzas for the user to choose from, as well as a "custom pizza" option.
-
-  *   `/custom`
-
-    If the user chooses the "custom pizza" option, they wil get to this page. Here they will be presented with a list of toppings to choose from, as well as a list of cheeses. **More on that later**
-
-  * `/done`
-
-    The order confirmation page. If the user chooses a pre-made pizza or finishes their custom pizza, they will get to this page. This page will display the order confirmation, which consists of the user's name, address, their choice of pizza and the price. **More on the price later**
-
-### Cheeses
-The cheeses will be an array of cheese objects like so:
-
-```javascript
-var cheeses = [
-  {
-    name: 'mozzarella',
-    displayName: 'Mozzarella cheese'
-    price: 0
-  },
-  {
-    name: 'parmesan',
-    displayName: 'Parmigiano Reggiano',
-    price: 100
-  }
-];
-```
-
-You are welcome to add as many cheeses as you like, and to provide pictures as well :)
-
-### Toppings
-The toppings will be an array of topping objects like so:
-
-```javascript
-var toppings = [
-  {
-    name: 'pepperoni',
-    displayName: 'Pepperoni',
-    price: 1
-  },
-  {
-    name: 'anchovies',
-    displayName: 'Anchovies',
-    price: 10
-  },
-  {
-    name: 'lobster',
-    displayName: 'Lobstah',
-    price: 25
-  }
-  {
-    name: 'truffle oil',
-    displayName: 'Mmmm... truffle oillll',
-    price: 100
-  }
-];
-```
-
-You are welcome to add as many toppings as you like, and to provide pictures as well :)
-
-### Pizzas
-The pizzas will be an array of pizza objects. Each pizza object is made up of one cheese choice, as many toppings as desired, a name and a price. The array of toppings will use the topping `name` field as a "unique ID":
-
-```javascript
-var pizzas = [
-  {
-    name: 'Cheese Pizza',
-    cheese: 'mozzarella',
-    toppings: []
-    price: 5
-  },
-  {
-    name: 'The Monster',
-    cheese: 'parmesan',
-    toppings: ['anchovies', 'lobster', 'truffle oil'],
-    price: 100
-  }
-];
-```
-
-You are welcome to add as many pizzas as you like, and to provide pictures as well :)
-
-### Custom pizzas!
-The custom pizza creation screen will present the user with a list of all the toppings available, their price and optionally a picture. The different cheese choices will be presented as well, along with their price and optional picture. For both toppings and cheeses, the `displayName` property should be used.
-
-The screen will also present the user with the total price of the pizza. This is calculated as a base price of $10, plus the prices of any toppings they choose.
-
-The user will be able to choose **up to four toppings** for their pizza. Whenever they change the topping choices, the price will change to reflect it.
-
-Once the user is happy, they can click on "Next" to be taken to the order confirmation page.
-
-### Order confirmation
-On the order confirmation page, the following information will be displayed:
-
-1. The user's name, phone number, email and home address
-2. The name of the pizza they chose, or "Custom pizza"
-3. A list of toppings on their pizza
-4. The final price for their order
-
-## Optional: link the app to a server!
-With some AJAX code, link your app to an API that can return the following data (probably as JSON):
-
-1. List of cheeses
-2. List of toppings
-3. List of pre-made pizzas
-
-On the order confirmation page, add an "Order Now" button. Clicking this button will send the order to the server with AJAX. The server should send back a JSON response with a unique order ID. Upon receiving the server response, your code should use the order ID to take the user to a new `/orders/:id` page.
-
-On the "order page", you should ask the user to provide their e-mail address to confirm they are the owner of that order. Through AJAX, send the user's email and orderId to the server. On the server side, if the email corresponds to the orderId, send back a JSON response with the order data. On the browser side, display the order data to the user on that same page.
+2. Start the server and Webpack with `npm start`
+3. Start coding!
