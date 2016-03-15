@@ -132,19 +132,23 @@ export default React.createClass({
     //                             return 'https://bredcrumbz-nicjo.c9users.io/images/bread-cat-72px.png'} 
     //                               else {return }
     // }
+    
+    
+    // style={{height: "100vh"}}
+// document.getElementById('body').clientHeight + 'px'
 
       return (
-        <div>
-            <h1>{this.state.path.title}</h1>
-            {this.state.started ? <button className="nextButton" onClick={this.handleNextButton}>Next!</button>  : <button className="startButton" onClick={this.handleStartButton}>Start!</button>}
-            <button className="locate" onClick={this.handleLocateButton}>Find Me!</button>
-            <section style={{height: "100vh"}}>
+        <div className="map_div" >
+            <div className="titleDiv">
+              <h1>{this.state.path.title}</h1>
+            </div>
+            <section className="map">
                 <GoogleMapLoader
                   containerElement={
                     <div
                       {...this.props}
                       style={{
-                        height: "100%",
+                        height: `100vh`,
                       }}
                     />
                   }
@@ -154,6 +158,7 @@ export default React.createClass({
                       // onClick={this.handleClick}
                       ref={(map) => {this._googleMapComponent = map; this.fitBounds(); }}
                       zoom={zoom}
+                      onBoundsChanged={this.handleBoundsChanged}
                       >
                       
                       {
@@ -171,7 +176,12 @@ export default React.createClass({
                     </GoogleMap>
                   }
                 />
-            </section>
+                </section>
+            
+            <div id="buttonsDiv">
+              <button className="locate" onClick={this.handleLocateButton} alt="Locate Me!"><i className="fa fa-location-arrow"></i></button>
+              {this.state.started ? <button className="nextButton" onClick={this.handleNextButton}>Next!</button>  : <button className="startButton" onClick={this.handleStartButton}>Start!</button>}
+            </div>
             
         </div>
     );
