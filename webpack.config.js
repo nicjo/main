@@ -1,5 +1,4 @@
-var autoprefixer = require('autoprefixer');
-// var css = require('./src/css/app.css');
+var autoprefixer = require ("autoprefixer")
 
 module.exports = {
   entry: __dirname + '/src/js/app.js',
@@ -20,9 +19,7 @@ module.exports = {
     ]
   },
   devtool: 'sourcemap',
-  postcss: function () {
-    return [autoprefixer];
-  }
+  postcss: [ autoprefixer({ browsers: ['last 2 versions'] }) ]
 }
 
 
@@ -32,3 +29,4 @@ module.exports = {
 //     })
     
 //     ]
+

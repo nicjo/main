@@ -156,7 +156,7 @@ VIEW PAGE
 }
 
 .locate:active:hover , .itemButton:active:hover {
-  background-color: pink;
+  background-color: #ee5500;
 }
 
 .nextButton:active:hover , .startButton:active:hover {
