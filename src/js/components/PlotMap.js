@@ -12,6 +12,31 @@ import geolocation from '../geolocation'
 
 import styles from '../styles';
 
+/*var Main = React.createClass({
+  render: function() {
+    return (
+      <a
+        href="#"
+        onTouchTap={this.handleTouchTap}
+        onClick={this.handleClick}>
+        Tap Me
+      </a>
+    );
+  },
+ 
+  handleClick: function(e) {
+    console.log("click", e);
+  },
+ 
+  handleTouchTap: function(e) {
+    console.log("touchTap", e);
+  }
+});
+ 
+ReactDOM.render(<Main />, document.getElementById("container"));*/
+
+
+
 export default React.createClass({
   getInitialState: function() {
     return {
@@ -50,8 +75,13 @@ export default React.createClass({
       lng: center.lng()
     };
   },
+  
   render: function() {
-
+    var markerImage = new google.maps.MarkerImage('../icons/Bags_of_Breadcrumbs-icon.png',
+                    new google.maps.Size(50, 25),
+                    new google.maps.Point(0, 0),
+                    new google.maps.Point(25, 12.5));
+                    
     return ( < GoogleMapLoader containerElement = { < div {...this.props
         }
         style = {
@@ -82,8 +112,9 @@ export default React.createClass({
                 <Marker
                   {...crumb}
                   animation= 'google.maps.Animation.DROP'
-                  icon= '../icons/Bags_of_Breadcrumbs-icon.png'
-                  onRightclick={this.props.onRightClick.bind(null, index)} //.bind(this, index) now passed to onRightclick call
+                  icon= {markerImage}
+                  onClick={this.props.onCrumbClick.bind(null, index)} //.bind(this, index) now passed to onRightclick call
+                  onTouchTap={this.props.handleTouchTap}
                 />
               );
             })}

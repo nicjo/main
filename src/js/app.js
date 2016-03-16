@@ -47,6 +47,25 @@ import Home from "./components/Home";
 
 import NotFound from "./components/NotFound";
 
+
+
+// Here we redefine the set() method.
+// If it is called for map option, we hide the InfoWindow, if "noSuppress"  
+// option is not true. As Google Maps does not know about this option,  
+// its InfoWindows will not be opened.
+
+var set = google.maps.InfoWindow.prototype.set;
+
+google.maps.InfoWindow.prototype.set = function (key, val) {
+    if (key === 'map' && ! this.get('noSupress')) {
+        console.warn('This InfoWindow is supressed.');
+        console.log('To enable it, set "noSupress" option to true.');
+        return;
+    }
+
+    set.apply(this, arguments);
+}
+
 var App = React.createClass({
   render: function() {
     return (
