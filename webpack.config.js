@@ -1,3 +1,5 @@
+var autoprefixer = require ("autoprefixer")
+
 module.exports = {
   entry: __dirname + '/src/js/app.js',
   output: {
@@ -9,8 +11,22 @@ module.exports = {
         test: /\.jsx?$/,
         loader: 'babel',
         exclude: /node_modules/
+      },
+      {
+        test: /\.css$/,
+        loader: "style-loader!css-loader!postcss-loader",
       }
     ]
   },
-  devtool: 'sourcemap'
+  devtool: 'sourcemap',
+  postcss: [ autoprefixer({ browsers: ['last 2 versions'] }) ]
 }
+
+
+// [
+//     autoprefixer ({
+//       path: ['./src/css']
+//     })
+    
+//     ]
+

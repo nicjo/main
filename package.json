@@ -17,6 +17,7 @@
   "author": "Ziad Saab <ziad.saab@gmail.com>",
   "license": "ISC",
   "dependencies": {
+    "autoprefixer": "^6.3.3",
     "babel": "^6.5.2",
     "babel-core": "^6.6.0",
     "babel-loader": "^6.2.4",
@@ -25,10 +26,14 @@
     "babel-preset-stage-2": "^6.5.0",
     "body-parser": "^1.15.0",
     "can-use-dom": "^0.1.0",
+    "css-loader": "^0.23.1",
     "express": "^4.13.4",
     "lodash": "^4.6.1",
     "mysql": "^2.10.2",
     "nodemon": "^1.9.1",
+    "postcss": "^5.0.19",
+    "postcss-cli": "^2.5.1",
+    "postcss-loader": "^0.8.2",
     "raf": "^3.2.0",
     "react": "^0.14.7",
     "react-addons-update": "^0.14.7",
@@ -36,7 +41,9 @@
     "react-google-maps": "^4.9.1",
     "react-router": "^2.0.0",
     "react-tap-event-plugin": "^0.2.2",
+    "react-toastr": "^2.4.0",
     "sequelize": "^3.19.3",
+    "style-loader": "^0.13.0",
     "superagent": "^1.8.0",
     "webpack": "^1.12.14"
   }

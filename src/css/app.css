@@ -1,4 +1,5 @@
 /* This is a bit better than setting border-box everywhere */
+
 html {
   box-sizing: border-box;
 }
@@ -38,6 +39,7 @@ CREATE PAGE
   z-index: 100;
   /*text-shadow: 1px -1px 2px #0a090a;*/
 }
+
 .plotPage {
   display: flex;
   flex-direction: column;
@@ -46,6 +48,149 @@ CREATE PAGE
 }
 
 .map {
+    flex: 1;
+    height: 100vh;
+    position: relative;
+    overflow: hidden;
+    transform: translateZ(0px);
+    background-color: rgb(229, 227, 223);
+}
+
+
+/*////////////////
+LIST PAGE
+////////////////*/
+
+
+
+/*h1 {*/
+/*  font-family: 'Roboto', 'Helvetica', sans-serif ;*/
+/*  padding: 10px;*/
+/*  margin: 0px;*/
+/*}*/
+
+.path-list {
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: column;
+    margin: 0;
+    padding: 0;
+}
+
+.listItem {
+  list-style: none;
+  margin: 5px 10px;
+}
+
+/*.itemButton {
+  border: none;
+  cursor: pointer;
+  padding: 15px 40px 15px 40px;
+  margin-left: 0;
+  font-family: 'Roboto', 'Helvetica', sans-serif ;
+}*/
+
+/*////////////////
+VIEW PAGE
+////////////////*/
+
+
+.main1 {
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-content: stretch;
+  align-items: stretch;
+  min-height: 100vh;
+}
+
+.map1 {
+  flex: 3;
+  border: 2px solid red;
+}
+
+#buttonsDiv {
+  display: flex;
+  /*flex-wrap: wrap;*/
+  flex-direction: row;
+  flex: 0 54px;
+}
+
+
+
+.itemButton, .nextButton, .startButton, .locate {
+  font-size: 1.3em;
+  font-family: 'Roboto', 'Helvetica', sans-serif;
+  padding: 10px;
+  z-index: 100;
+  border: none;
+  border-radius: 4px;
+  text-decoration: none;
+  margin: 0;
+}
+
+.nextButton, .startButton, .locate {
+  text-align: center;
+  margin: 5px;
+}
+
+.nextButton, .startButton {
+  flex-grow: 4;
+}
+.locate {
+  flex-grow: 0;
+}
+
+
+.nextButton, .startButton {
+  background-color: mediumaquamarine;
+}
+
+.itemButton, .locate{
+  background-color: silver;
+}
+
+.itemButton {
+  width: 100%;
+  text-align: left;
+}
+
+.locate:active:hover , .itemButton:active:hover {
+  background-color: #ee5500;
+}
+
+.nextButton:active:hover , .startButton:active:hover {
+  background-color: lightgreen;
+}
+
+a:link {
+  text-decoration: none;
+}
+
+/*.itemDiv:link {*/
+/*}*/
+
+
+h1 {
+  border: none;
+  margin: 0 0 10px 0;
+  padding: 10px;
+  font-size: 1.3em;
+  font-weight: bold;
+  text-transform: uppercase;
+  /*width: 100vw;*/
+  width: 100%;
+  background: rgba(228, 224, 224, 0.47);
+  z-index: 100;
+  color: #515b61;
+  /*text-decoration: none;*/
+  font-family: 'Roboto', 'Helvetica', sans-serif;
+}
+
+.fa-location-arrow {
+  padding-left: 5px;
+  padding-right: 5px;
   flex: 1;
 }
 
