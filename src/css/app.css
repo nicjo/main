@@ -71,17 +71,35 @@ HOME PAGE
     width: 100vw;
 }
 
-.hPWhite {
+/*showing ^ gradient*/
+/*.hPWhite {
     align-items: center;
-    background-color: white;
+    background-image: url("../images/puffins-in-snow.jpg");
+    background-position:50%, 125%;
+    background-size: 250%;
     display: flex;
-    /* flex: 1; */
+    /* flex: 1; 
     flex-direction: column;
     flex-grow: 1;
     height: calc(100vh - 1.2em);
     justify-content: space-around;
     margin: 1em;
     width: calc(100vw - 1.2em);
+}*/
+
+.hPWhite {
+    align-items: center;
+    background-image: url("../images/puffins-in-snow-1500x1500.jpg");
+    background-position: 50% 80%;
+    background-size: cover;
+    display: flex;
+    /* flex: 1; */
+    flex-direction: column;
+    flex-grow: 1;
+    height: 100vh;
+    justify-content: space-around;
+    /* margin: 1em; */
+    width: 100vw;
 }
 
 .homeButton {
