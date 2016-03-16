@@ -10,6 +10,11 @@ from "react-google-maps";
 //our variables
 import geolocation from '../geolocation'; 
 
+var ReactToastr = require("react-toastr");
+var {ToastContainer} = ReactToastr; // This is a React Element.
+// For Non ES6...
+// var ToastContainer = ReactToastr.ToastContainer;
+var ToastMessageFactory = React.createFactory(ReactToastr.ToastMessage.animation);
 
 export default React.createClass({
     getInitialState: function(){
@@ -31,11 +36,17 @@ export default React.createClass({
         response.body.points.forEach(function(point) {
           point.lat = point.latitude;
           point.lng = point.longitude;
+          
+          if (Math.floor(Math.random() * 10) < 5) {
+              point.text = "this is exactly where it's supposed to be!"
+          }
         });
+        console.log(response.body.points)
         
         this.setState({
           path: response.body
         });
+        
       });
       
     },
@@ -67,7 +78,23 @@ export default React.createClass({
   },
   
   
+  // this will send an alert when clicked, only if the marker contains text
+  handleMarkerClick: function(e) {
+    console.log()
+    var txt = this.state.path.points[e].text;
+      if (txt !==  undefined){
+      console.log('Oh, Hello');
+      this.refs.container.success(
+      txt,
+      "Apparently this need 2 values " + Date.now(),
+      {
+      timeOut: 3000,
+      extendedTimeOut: 1000,
+    });
+    }
+  },
   
+
   //this will 'start' the map by centering on the first marker and changing its colour
   handleStartButton: function(e) {
     console.log(this.state.path.points[0])
@@ -77,13 +104,6 @@ export default React.createClass({
       current: 0,
       zoom: 20
     });
-    // this.setState({
-    //   center: this.state.path.points[0],
-    //   zoom: 20,
-    //   started: true,
-    //   current: 0
-      
-    // })
   },
   
     //this will 'start' the map by centering on the first marker and changing its colour
@@ -110,10 +130,8 @@ export default React.createClass({
       if (!this.state.path) {
         return <div>loading</div>;
       }
-      // console.log(this.__proto__)
-      // console.log(this.refs.map)
       
-      var content = this.state.content
+    var content = this.state.content
       
     let { id } = this.props.params;
 
@@ -121,57 +139,59 @@ export default React.createClass({
     
     var center = this.state.center;
 
-
-
-    // var image = (this.state.path.points[i] <= this.state.current ? 'https://bredcrumbz-nicjo.c9users.io/images/bread-cat-72px.png' : 'https://bredcrumbz-nicjo.c9users.io/images/NyanCat.gif');
-    var image = '/images/bread-cat-72px.png';
+    var image = '/images/puffin-marker.png';
     var image2 = '/images/NyanCat.gif';
+    var image3 = '/images/bread-cat-72px.png';
 
-    // var image2 = for (var i in this.state.path.points) {
-    //                   if (this.state.path.points[i] <= this.state.current) {
-    //                             return 'https://bredcrumbz-nicjo.c9users.io/images/bread-cat-72px.png'} 
-    //                               else {return }
-    // }
+
 
       return (
-        <div>
-            <h1>{this.state.path.title}</h1>
-            {this.state.started ? <button className="nextButton" onClick={this.handleNextButton}>Next!</button>  : <button className="startButton" onClick={this.handleStartButton}>Start!</button>}
-            <button className="locate" onClick={this.handleLocateButton}>Find Me!</button>
-            <section style={{height: "100vh"}}>
+        <div className="map_div" >
+            <div className="titleDiv">
+              <h1>{this.state.path.title}</h1>
+            </div>
+            <section className="map">
                 <GoogleMapLoader
                   containerElement={
                     <div
                       {...this.props}
                       style={{
-                        height: "100%",
+                        height: `100vh`,
                       }}
                     />
                   }
                   
                   googleMapElement={
                     <GoogleMap
-                      // onClick={this.handleClick}
                       ref={(map) => {this._googleMapComponent = map; this.fitBounds(); }}
                       zoom={zoom}
                       >
-                      
+                      <ToastContainer ref="container"
+                        toastMessageFactory={ToastMessageFactory}
+                        className="toast-top-right"
+                        onClick={this.handleOnClick}
+                        tapToDismiss={true}
+                        />
                       {
                         this.state.path.points.map((soloMarker, i) => (
                           <Marker
+                            onClick={this.handleMarkerClick.bind(this, i)}
                             key={i}
                             position={{ lat: soloMarker.lat, lng: soloMarker.lng }}
-                            title={`Position: ` + i}
-                            icon={(isFinite(this.state.current) ? this.state.current : -1) >= i ? image2 : image}
+                            title={i.toString()}
+                            icon={(isFinite(this.state.current) ? this.state.current : -1) >= i ? image2 : soloMarker.text ? image3 : image}
                           />
                         ))
                       }
-                      
-                      
                     </GoogleMap>
                   }
                 />
-            </section>
+                </section>
+            
+            <div id="buttonsDiv">
+              <button className="locate" onClick={this.handleLocateButton} alt="Locate Me!"><i className="fa fa-location-arrow"></i></button>
+              {this.state.started ? <button className="nextButton" onClick={this.handleNextButton}>Next!</button>  : <button className="startButton" onClick={this.handleStartButton}>Start!</button>}
+            </div>
             
         </div>
     );

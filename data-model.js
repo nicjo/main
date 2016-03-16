@@ -17,7 +17,7 @@ var Point = db.define('point', {
 
 Path.hasMany(Point);
 
-//db.sync(); // comment this line after the first run
+// db.sync(); // comment this line after the first run
 
 module.exports = {
     Path: Path,
