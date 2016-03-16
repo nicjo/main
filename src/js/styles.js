@@ -110,6 +110,9 @@ export default (
             },
             {
                 "saturation": 50
+            },
+            {
+                "hue": "#F12800"
             }
         ]
     }

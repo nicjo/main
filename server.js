@@ -49,7 +49,11 @@ app.get('/*', function(request, response) {
 app.post('/create', function(request, response) {
    db.Path.create({
      title: request.body.title,
-     points: request.body.points.map( point => ({latitude: point.position.lat, longitude: point.position.lng}) )
+     points: request.body.points.map( point => ({
+       latitude: point.position.lat,
+       longitude: point.position.lng,
+       message: point.txt
+     }))
    }, {
      include: db.Point
    }).then(

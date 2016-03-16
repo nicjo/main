@@ -3,17 +3,27 @@ import React from "react";
 import {browserHistory} from "react-router";
 import request from "superagent";
 
+import ReactDOM from "react-dom";
+import injectTapEventPlugin from "react-tap-event-plugin";
+injectTapEventPlugin();
+
 //Child Components
 import PlotMap from "./PlotMap";
+
+var crumbMenu =(
+`<menu type="context" id="">
+ <menuitem label="Remove your crumb" onclick="this.props.onRightClick.bind(null, index)">
+ </menu>`
+)
 
 export default React.createClass({
 
   getInitialState: function() {
    return {
      title: 'untitled',
-     bcrumbs: [],
      crumbs: [],
-     center: {}
+     center: {},
+     message: '' //will be added to a marker (crumb)
    }
   },
   handleKey: function(e) {
@@ -81,13 +91,19 @@ export default React.createClass({
     }
     
   },
-  handleCrumbRightClick: function(i) {
-    
-    //console.log(i);
-    
-    var crumbs = this.state.crumbs;
+  handleCrumbClick: function(i) {
+  
+    var currentMessage = this.state.crumbs[i].txt || "Watch out for the trap door beneath you!";
+    var message = prompt("Leave a secret instruction", currentMessage);
+    //going to give a context menu with var crumbs (delete) + add a note var message = prompt("Leave a secret instruction", "Watch out for the trap door beneath you!");-> message:message
+    //by setting state for menu display:false > true?
+    this.state.crumbs[i].txt = message;
+    this.forceUpdate();
+    /*var crumbs = this.state.crumbs;
+  
     crumbs.splice(i,1);
-    this.setState({crumbs:crumbs});
+    this.setState({crumbs:crumbs, message: message});
+    */console.log(this.state);
     /*let {
       crumbs
     } = this.state;*/
@@ -100,13 +116,16 @@ export default React.createClass({
       crumbs
     });*/
   },
+ /* handleTouchTap: function(e) {
+    return crumbMenu
+  },*/
   render: function() {
     return (
       <div className="plotPage">
         <form action="create">
           <input className= "titleInput" onKeyUp={this.handleKey} type="text" name="pathTitle" ref= "title" placeholder="Name your path"/>
         </form>
-       <PlotMap className= "map" center={this.state.center} crumbs={this.state.crumbs} onClick= {this.handleMapClick} onRightClick= {this.handleCrumbRightClick}/>
+       <PlotMap className= "map" center={this.state.center} crumbs={this.state.crumbs} onClick= {this.handleMapClick} onCrumbClick= {this.handleCrumbClick}/>
        <button className="create" onClick={this.handleClick}>Leave a trail</button>
      </div>
     )

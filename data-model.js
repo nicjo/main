@@ -12,12 +12,19 @@ var Path = db.define('path', {
 var Point = db.define('point', {
     timestamp: Sequelize.DATE,
     latitude: Sequelize.FLOAT,
-    longitude: Sequelize.FLOAT
+    longitude: Sequelize.FLOAT,
+    message: Sequelize.STRING
 });
+
+
 
 Path.hasMany(Point);
 
+
+//db.sync({force:true}); // comment this line after the first run  reboot: {force:true}
+
 // db.sync(); // comment this line after the first run
+
 
 module.exports = {
     Path: Path,
