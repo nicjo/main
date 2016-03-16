@@ -14,7 +14,11 @@ module.exports = {
       },
       {
         test: /\.css$/,
-        loader: "style-loader!css-loader!postcss-loader",
+        loader: "style-loader!css-loader!postcss-loader", //order critical (last to first)
+      },
+      {
+        test:/\.(jpg|png|gif)$/i,  //regular expression (matches parts of a string 'i' = case-insensitive)
+        loader:'url'
       }
     ]
   },
