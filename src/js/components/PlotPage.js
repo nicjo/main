@@ -1,4 +1,18 @@
 //dependencies
+
+var EventEmitter = {
+    _events: {},
+    dispatch: function (event, data) {
+        if (!this._events[event]) return; // no one is listening to this event
+        for (var i = 0; i < this._events[event].length; i++)
+            this._events[event][i](data);
+    },
+    subscribe: function (event, callback) {
+      if (!this._events[event]) this._events[event] = []; // new event
+      this._events[event].push(callback);
+    }
+}
+
 import React from "react";
 import {browserHistory} from "react-router";
 import request from "superagent";
@@ -10,11 +24,7 @@ injectTapEventPlugin();
 //Child Components
 import PlotMap from "./PlotMap";
 
-var crumbMenu =(
-`<menu type="context" id="">
- <menuitem label="Remove your crumb" onclick="this.props.onRightClick.bind(null, index)">
- </menu>`
-)
+import {CreateMenu, EditMenu, MenuItem} from "./CrumbMenu"
 
 export default React.createClass({
 
@@ -92,18 +102,25 @@ export default React.createClass({
     
   },
   handleCrumbClick: function(i) {
-  
-    var currentMessage = this.state.crumbs[i].txt || "Watch out for the trap door beneath you!";
+    
+    
+    EventEmitter.dispatch('markerClick',i);
+
+    
+   // console.log(this.refs.createMenu)
+    //console.log(this.refs.createMenu.refs.edit);
+   // this.refs.createMenu.showMenu().bind(this.refs.createMenu);
+    /*var currentMessage = this.state.crumbs[i].txt || "Watch out for the trap door beneath you!";
     var message = prompt("Leave a secret instruction", currentMessage);
     //going to give a context menu with var crumbs (delete) + add a note var message = prompt("Leave a secret instruction", "Watch out for the trap door beneath you!");-> message:message
     //by setting state for menu display:false > true?
     this.state.crumbs[i].txt = message;
-    this.forceUpdate();
+    this.forceUpdate();*/
     /*var crumbs = this.state.crumbs;
   
     crumbs.splice(i,1);
     this.setState({crumbs:crumbs, message: message});
-    */console.log(this.state);
+    *///console.log(this.state);
     /*let {
       crumbs
     } = this.state;*/
@@ -115,13 +132,13 @@ export default React.createClass({
     this.setState({
       crumbs
     });*/
+    //state to dislay the menu
   },
- /* handleTouchTap: function(e) {
-    return crumbMenu
-  },*/
+
   render: function() {
     return (
       <div className="plotPage">
+        <CreateMenu EventEmitter={EventEmitter} ref="createMenu"/>
         <form action="create">
           <input className= "titleInput" onKeyUp={this.handleKey} type="text" name="pathTitle" ref= "title" placeholder="Name your path"/>
         </form>
@@ -131,3 +148,8 @@ export default React.createClass({
     )
   }
 });
+
+
+
+
+
