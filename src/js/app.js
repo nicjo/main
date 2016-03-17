@@ -10,6 +10,7 @@ var IndexRoute = ReactRouter.IndexRoute;
 var browserHistory = ReactRouter.browserHistory;
 
 import '../css/app.css'; 
+import '../css/animate.css';
 
 import {
   default as update
