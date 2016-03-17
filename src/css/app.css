@@ -97,6 +97,47 @@ CRUMB MENU
 ////////////////*/
 
 .menu {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0,0,0, 0.5);
+  z-index: 1000;
+  transition: opacity 150ms ease-in;
+}
+
+.appear-enter.menu {
+  opacity: 0;
+}
+
+.appear-enter-active.menu {
+  opacity: 1;
+}
+.appear-leave.menu {
+  opacity: 1;
+}
+.appear-leave-active.menu {
+  opacity: 0;
+}
+
+.top_menu {
+  transition: transform 200ms ease-in;
+}
+.appear-enter .top_menu {
+  transform: translateX(-100%);
+}
+.appear-enter-active .top_menu {
+  transform: translateX(0);
+}
+.appear-leave .top_menu {
+  transform: translateX(0%);
+}
+.appear-leave-active .top_menu {
+  transform: translateX(-100%);
+}
+
+.middle_menu {
   display: none;
   position: fixed;
   top: 0;
@@ -106,14 +147,23 @@ CRUMB MENU
   background-color: rgba(0,0,0, 0.5);
   z-index: 100;
 }
-.menu.visible {
-  display: block;
-}
 
 .top_menu {
-  position: relative;
-  background-color: white;
-  box-shadow: 0 2px 5px rgba(0,0,0, 0.5);
+    position: relative;
+    background-color: white;
+    background-image: url("../images/eggshell-white.jpg");
+    border-radius: 2px 15px 15px 2px;
+    box-shadow: 0 2px 5px rgba(0,0,0, 0.7);
+    margin: 5vh 0 0 0;
+    padding-left: 5vw;
+    padding-right: 1vw;
+    font-size: 2em;
+    width: fit-content;
+}
+
+.menuItem {
+  cursor: pointer
+  
 }
 
 /*.menu {
