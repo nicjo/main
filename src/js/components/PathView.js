@@ -131,7 +131,6 @@ export default React.createClass({
     }
   },
   
-  
     render: function() {
       
       if (!this.state.path) {
@@ -146,11 +145,9 @@ export default React.createClass({
     
     var center = this.state.center;
 
-    var image = '/images/puffin-marker_44x64.png';
-    var image2 = '/images/NyanCat.gif';
-    var image3 = '/images/bread-cat-72px.png';
-
-
+    var defaultImage = '/images/puffin-marker_44x64_default.png';
+    var infoImage = '/images/puffin-marker_44x64_info.png';
+    var visitedImage = '/images/puffin-marker_44x64_visited.png';
 
       return (
         <div className="map_div" >
@@ -186,7 +183,7 @@ export default React.createClass({
                             key={i}
                             position={{ lat: soloMarker.latitude, lng: soloMarker.longitude }}
                             title={i.toString()}
-                            icon={(isFinite(this.state.current) ? this.state.current : -1) >= i ? image2 : soloMarker.message ? image3 : image}
+                            icon={(isFinite(this.state.current) ? this.state.current : -1) >= i ? visitedImage : soloMarker.message ? infoImage : defaultImage}
                           />
                         ))
                       }
