@@ -111,10 +111,28 @@ CRUMB MENU
   display: block;
 }
 
+.middle_menu {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0,0,0, 0.5);
+  z-index: 100;
+}
+
 .top_menu {
-  position: relative;
-  background-color: white;
-  box-shadow: 0 2px 5px rgba(0,0,0, 0.5);
+    position: relative;
+    background-color: white;
+    background-image: url("../images/eggshell-white.jpg");
+    border-radius: 2px 15px 15px 2px;
+    box-shadow: 0 2px 5px rgba(0,0,0, 0.7);
+    margin: 5vh 0 0 0;
+    padding-left: 5vw;
+    padding-right: 1vw;
+    font-size: 2em;
+    width: fit-content;
 }
 
 /*.menu {
