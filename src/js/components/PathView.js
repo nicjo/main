@@ -36,12 +36,6 @@ export default React.createClass({
         response.body.points.forEach(function(point) {
           point.lat = point.latitude;
           point.lng = point.longitude;
-          
-          if (Math.floor(Math.random() * 10) < 5) {
-              point.text = "this is exactly where it's supposed to be!"
-          }
-        });
-        console.log(response.body.points)
         
         this.setState({
           path: response.body
@@ -49,6 +43,7 @@ export default React.createClass({
         
       });
       
+    });
     },
     
    fitBounds: function(){
@@ -81,16 +76,15 @@ export default React.createClass({
   // this will send an alert when clicked, only if the marker contains text
   handleMarkerClick: function(e) {
     console.log()
-    var txt = this.state.path.points[e].text;
+    var txt = this.state.path.points[e].message;
       if (txt !==  undefined){
-      console.log('Oh, Hello');
-      this.refs.container.success(
+      // console.log('Oh, Hello');
+      this.refs.container.info(
       txt,
-      "Apparently this need 2 values " + Date.now(),
+      "",
       {
-      timeOut: 3000,
-      extendedTimeOut: 1000,
-    });
+        timeOut: 5000
+      });
     }
   },
   
@@ -110,7 +104,14 @@ export default React.createClass({
   handleNextButton: function(e) {
     
     if (this.state.current === this.state.path.points.length - 1) {
-      alert("You finished the path!");
+      // alert("You finished the path!");
+      
+      this.refs.container.success(
+      "You made it to the end!",
+      "Congrats!",
+      {
+        timeOut: 5000
+      });
       this.setState({
         started: false,
         current: undefined
@@ -139,7 +140,7 @@ export default React.createClass({
     
     var center = this.state.center;
 
-    var image = '/images/puffin-marker.png';
+    var image = '/images/puffin-marker_44x64.png';
     var image2 = '/images/NyanCat.gif';
     var image3 = '/images/bread-cat-72px.png';
 
