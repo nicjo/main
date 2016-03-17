@@ -1,6 +1,8 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import EventEmitter from '../event-emitter';
+import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
+
 
 export const CreateMenu = React.createClass({
      
@@ -44,16 +46,25 @@ export const EditMenu = React.createClass({
     },
 
     hide: function() {
+        
+        EventEmitter.dispatch("hideMenu");
+        
         document.removeEventListener("click", this.hide);
         this.setState({ visible: false });
     },
     render: function() {
-        return <div className={(this.state.visible === true ? "visible " : "") + ' menu'}>
-            <div className="top_menu">
-                <MenuItem onClick={() =>EventEmitter.dispatch('addMessage', this.state.index)}>Add a hint</MenuItem>
-                <MenuItem onClick={() => EventEmitter.dispatch('deleteCrumb', this.state.index)}>Delete this crumb</MenuItem>
-            </div>
-        </div>;
+        return (
+            <ReactCSSTransitionGroup transitionName="appear" transitionEnterTimeout={1000} transitionLeaveTimeout={1000}>
+                {this.state.visible ?
+                <div key="menu" className="menu">
+                    <div className="top_menu">
+                        <MenuItem onClick={() =>EventEmitter.dispatch('addMessage', this.state.index)}>Add Hint</MenuItem>
+                        <MenuItem onClick={() => EventEmitter.dispatch('deleteCrumb', this.state.index)}>Delete Crumb</MenuItem>
+                        <MenuItem>Close Menu</MenuItem>
+                    </div>
+                </div> : null}
+            </ReactCSSTransitionGroup>
+        );
     }
 });
 
@@ -63,7 +74,7 @@ export const MenuItem = React.createClass({
     },
 
     render: function() {
-        return <div className="menuItem" onClick={this.props.onClick}>{this.props.children}</div>;
+        return <div className="menuItem" onClick={this.props.onClick || function() {}}>{this.props.children}</div>;
     }
 });
 

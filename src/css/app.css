@@ -97,17 +97,44 @@ CRUMB MENU
 ////////////////*/
 
 .menu {
-  display: none;
   position: fixed;
   top: 0;
   left: 0;
   width: 100vw;
   height: 100vh;
   background-color: rgba(0,0,0, 0.5);
-  z-index: 100;
+  z-index: 1000;
+  transition: opacity 150ms ease-in;
 }
-.menu.visible {
-  display: block;
+
+.appear-enter.menu {
+  opacity: 0;
+}
+
+.appear-enter-active.menu {
+  opacity: 1;
+}
+.appear-leave.menu {
+  opacity: 1;
+}
+.appear-leave-active.menu {
+  opacity: 0;
+}
+
+.top_menu {
+  transition: transform 200ms ease-in;
+}
+.appear-enter .top_menu {
+  transform: translateX(-100%);
+}
+.appear-enter-active .top_menu {
+  transform: translateX(0);
+}
+.appear-leave .top_menu {
+  transform: translateX(0%);
+}
+.appear-leave-active .top_menu {
+  transform: translateX(-100%);
 }
 
 .middle_menu {
@@ -132,6 +159,11 @@ CRUMB MENU
     padding-right: 1vw;
     font-size: 2em;
     width: fit-content;
+}
+
+.menuItem {
+  cursor: pointer
+  
 }
 
 /*.menu {
