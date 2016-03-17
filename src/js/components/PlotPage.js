@@ -3,7 +3,7 @@
 import EventEmitter from '../event-emitter';
 
 import React from "react";
-import {browserHistory} from "react-router";
+import {browserHistory, Link} from "react-router";
 import request from "superagent";
 
 import ReactDOM from "react-dom";
@@ -143,7 +143,12 @@ export default React.createClass({
           <input className= "titleInput" onKeyUp={this.handleKey} type="text" name="pathTitle" ref= "title" placeholder="Name your path"/>
         </form>
        <PlotMap className= "map" center={this.state.center} crumbs={this.state.crumbs} onClick= {this.handleMapClick} />
-       <button className="create" onClick={this.handleClick}>Leave a trail</button>
+       
+        <div id="buttonsDiv">
+              <button className="locate" onClick={this.handleLocateButton} alt="Locate Me!"><i className="fa fa-location-arrow"></i></button>
+              <button className="createButton" onClick={this.handleClick}>Leave a trail</button>
+              <Link className="homeLink" to="/"><button className="homeBut" alt="Home!" ><i className="fa fa-home"></i></button></Link>
+        </div>
      </div>
     )
   }
