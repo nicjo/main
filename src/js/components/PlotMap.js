@@ -12,6 +12,8 @@ import geolocation from '../geolocation'
 
 import styles from '../styles';
 
+import EventEmitter from '../event-emitter';
+
 /*var Main = React.createClass({
   render: function() {
     return (
@@ -113,7 +115,7 @@ export default React.createClass({
                   //animation= {google.maps.Animation.DROP} * was making multiple markers drop (again)
                   draggable={true}
                   icon= {markerImage}
-                  onClick={this.props.onCrumbClick.bind(null, index)} //.bind(this, index) now passed to onRightclick call
+                  onClick={() => EventEmitter.dispatch('markerClick', index)}
                   size= {60,60}
                 />
               );

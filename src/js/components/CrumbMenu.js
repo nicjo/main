@@ -1,52 +1,46 @@
 import React from "react";
 import ReactDOM from "react-dom";
+import EventEmitter from '../event-emitter';
 
 export const CreateMenu = React.createClass({
+     
     
     componentDidMount(){
         
         var that = this;
         
-        this.props.EventEmitter.subscribe("markerClick", function(index){
+        EventEmitter.subscribe("markerClick", function(index){
             that.showMenu(index)
         })
     },
     
     showMenu: function(index) {
-        this.refs.edit.show();
+        this.refs.edit.show(index);
     },
 
     render: function() {
         return (
         <div>
-            <button onClick={this.showMenu}>Show Crumb Menu!</button> {/*will be marker*/}
-
-            <EditMenu ref="edit" alignment="left">
-                <MenuItem hash="addMessage">Add a hint</MenuItem>
-                <MenuItem hash="deleteCrumb">Delete this crumb</MenuItem>
-            </EditMenu>
-
+            <EditMenu ref="edit" alignment="left"/>
         </div>
         );
     }
 });
 
 export const EditMenu = React.createClass({
-    getInitialState: function() {
+   getInitialState: function() {
         return {
             visible: false  
         };
     },
 
 
-    show: function() {
-    this.setState({ visible: true });
+    show: function(index) {
+    this.setState({ visible: true, index: index });
     var that = this;
     setTimeout(function() {
         document.addEventListener("click", that.hide);
     }, 0);
-    
-    console.log(this,"THIS SHIT IS THE THIS")
     },
 
     hide: function() {
@@ -54,8 +48,11 @@ export const EditMenu = React.createClass({
         this.setState({ visible: false });
     },
     render: function() {
-        return <div className="menu">
-            <div className={(this.state.visible === true ? "visible " : "")}>{this.props.children}</div>
+        return <div className={(this.state.visible === true ? "visible " : "") + ' menu'}>
+            <div className="top_menu">
+                <MenuItem onClick={() =>EventEmitter.dispatch('addMessage', this.state.index)}>Add a hint</MenuItem>
+                <MenuItem onClick={() => EventEmitter.dispatch('deleteCrumb', this.state.index)}>Delete this crumb</MenuItem>
+            </div>
         </div>;
     }
 });
@@ -66,7 +63,7 @@ export const MenuItem = React.createClass({
     },
 
     render: function() {
-        return <div className="menuItem" onClick={this.navigate.bind(this, this.props.hash)}>{this.props.children}</div>;
+        return <div className="menuItem" onClick={this.props.onClick}>{this.props.children}</div>;
     }
 });
 
