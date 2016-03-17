@@ -66,6 +66,10 @@ CREATE PAGE
    background-color: rgb(229, 227, 223);
 }
 
+/*.map .map1 {*/
+/*    transform: initial;*/
+/*    position: initial;*/
+/*}*/
 
 /*////////////////
 LIST PAGE
@@ -182,7 +186,6 @@ VIEW PAGE
   display: flex;
   flex-direction: row;
   align-items: flex-start;
-  /*background: rgba(228, 224, 224, 0.47);*/
 }
 
 
@@ -196,10 +199,10 @@ VIEW PAGE
   min-height: 100vh;
 }
 
-.map1 {
-  flex: 3;
-  border: 2px solid red;
-}
+/*.map1 {*/
+/*  flex: 3;*/
+/*  border: 2px solid red;*/
+/*}*/
 
 #buttonsDiv {
   display: flex;
@@ -253,7 +256,7 @@ VIEW PAGE
   text-align: left;
 }
 
-.locate:active:hover , .itemButton:active:hover, .homeBut:active:hover  {
+.locate:active:hover , .itemButton:active:hover, .homeBut:active:hover {
   background-color: #ee5500;
 }
 
@@ -304,8 +307,8 @@ HOME PAGE
 .homePage {
     align-content: stretch;
     align-items: center;
-    background-color: rgb(20,35,57);
-    background-image: linear-gradient( 70deg, rgb(20,35,57), rgb(147,0,15), rgb(249,174,0), rgb(147,0,15), rgb(20,35,57) );
+    /*background-color: rgb(20,35,57);*/
+    /*background-image: linear-gradient( 70deg, rgb(20,35,57), rgb(147,0,15), rgb(249,174,0), rgb(147,0,15), rgb(20,35,57) );*/
     display: flex;
     flex-direction: column;
     height: 100vh;
@@ -332,7 +335,7 @@ HOME PAGE
 
 .hPWhite {
     align-items: center;
-    background-image: url("../images/puffins-in-snow-1500x1500.jpg");
+    background-image: url("../images/puffins-in-snow-1500x1500-gray.png");
     background-position: 50% 80%;
     background-size: cover;
     display: flex;
@@ -347,9 +350,43 @@ HOME PAGE
 
 .homeButton {
     padding: 1.2em;
+    margin: 1em;
     width: 30vw;
+    flex-grow: 1;
+    flex-basis: 100%;
+    box-shadow: 0.1em 0.2em 1em rgba(0, 0, 0, 0.3);
+    background-color: #032D3F;
+    font-family:  'Roboto', 'Helvetica', sans-serif;
+    font-weight: bold;
+    color: #FFF;
+    opacity: 0.8;
+    
+}
+
+.homeButton:hover:active {
+  opacity: 1;
+  box-shadow: none;
+}
+
+.homeButtonsDiv {
+  /*position:absolute;*/
+  /*top:60%;*/
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: column;
+  justify-content: center;
+  flex-grow:1;
+  /*left:50%;*/
 }
 
 .emptyHP {
-    height: 15vh;
+    /*height: 15vh;*/
+    flex-grow: 3;
+    padding: 5em 1em 0 1em;
+}
+
+.homeImage {
+  width: auto;
+  height: 100%;
+  /*min-width: 100px;*/
 }

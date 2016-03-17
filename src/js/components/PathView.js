@@ -166,7 +166,7 @@ export default React.createClass({
                     <div
                       {...this.props}
                       style={{
-                        height: `100vh`,
+                        height: `100vh`
                       }}
                     />
                   }

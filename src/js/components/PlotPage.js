@@ -12,8 +12,7 @@ injectTapEventPlugin();
 
 //Child Components
 import PlotMap from "./PlotMap";
-
-import {CreateMenu} from "./CrumbMenu"
+import {CreateMenu} from "./CrumbMenu";
 
 export default React.createClass({
 
@@ -69,6 +68,7 @@ export default React.createClass({
       title: "untitled"
     })
   },
+
   handleMapClick: function(e) {
     // e.stopPropagation();
     
@@ -135,6 +135,7 @@ export default React.createClass({
     //state to dislay the menu
   },
 
+
   render: function() {
     return (
       <div className="plotPage">
@@ -145,7 +146,7 @@ export default React.createClass({
        <PlotMap className= "map" center={this.state.center} crumbs={this.state.crumbs} onClick= {this.handleMapClick} />
        
         <div id="buttonsDiv">
-              <button className="locate" onClick={this.handleLocateButton} alt="Locate Me!"><i className="fa fa-location-arrow"></i></button>
+              {/*<button className="locate" onClick={this.handleLocateButton} alt="Locate Me!"><i className="fa fa-location-arrow"></i></button>*/}
               <button className="createButton" onClick={this.handleClick}>Leave a trail</button>
               <Link className="homeLink" to="/"><button className="homeBut" alt="Home!" ><i className="fa fa-home"></i></button></Link>
         </div>

@@ -6,10 +6,13 @@ export default React.createClass({
     return (
       <div className="homePage">
         <div className="hPWhite">
-          <div className="emptyHP"></div>
-          <button className="homeButton"><Link to="/create">Create a Path</Link></button>
-          <button className="homeButton"><Link to="/list">View Paths</Link></button>
-          <div className="emptyHP"></div>
+          <div className="emptyHP">
+          <img className="homeImage" src="/images/puffin-logo-300x251.png"/>
+          </div>
+            <div className="homeButtonsDiv">
+              <Link to="/create"><button className="homeButton"><i className="fa fa-map-marker"></i> Create a Path</button></Link>
+              <Link to="/list"><button className="homeButton"><i className="fa fa-list"></i> View Paths</button></Link>
+            </div>
         </div>  
       </div>
       
