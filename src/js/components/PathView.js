@@ -103,6 +103,10 @@ export default React.createClass({
     });
   },
   
+  // handleHomeBut: function() {
+  //   return <Link to="/"></Link>
+  // },
+  
     //this will 'start' the map by centering on the first marker and changing its colour
   handleNextButton: function(e) {
     
@@ -146,13 +150,14 @@ export default React.createClass({
     var center = this.state.center;
 
     var defaultImage = '/images/puffin-marker_44x64_default.png';
-    var infoImage = '/images/puffin-marker_44x64_info.png';
+    var infoImage = '/images/puffin-marker_44x64_info3.png';
     var visitedImage = '/images/puffin-marker_44x64_visited.png';
 
       return (
         <div className="map_div" >
-            <div className="titleDiv">
+            <div className="viewTitleDiv">
               <h1>{this.state.path.title}</h1>
+              {/*<Link to="/"><button className="homeBut" alt="Home!" ><i className="fa fa-home"></i></button></Link>*/}
             </div>
             <section className="map">
                 <GoogleMapLoader
@@ -195,6 +200,7 @@ export default React.createClass({
             <div id="buttonsDiv">
               <button className="locate" onClick={this.handleLocateButton} alt="Locate Me!"><i className="fa fa-location-arrow"></i></button>
               {this.state.started ? <button className="nextButton" onClick={this.handleNextButton}>Next!</button>  : <button className="startButton" onClick={this.handleStartButton}>Start!</button>}
+              <Link className="homeLink" to="/"><button className="homeBut" alt="Home!" ><i className="fa fa-home"></i></button></Link>
             </div>
             
         </div>

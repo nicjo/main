@@ -79,8 +79,8 @@ export default React.createClass({
   },
   
   render: function() {
-    var markerImage = new google.maps.MarkerImage('../images/puffin-marker.png',
-                    new google.maps.Size(64, 93),
+    var markerImage = new google.maps.MarkerImage('../images/puffin-marker_44x64_default.png',
+                    new google.maps.Size(44, 64),
                     new google.maps.Point(0, 0));
                     
     return ( < GoogleMapLoader containerElement = { < div {...this.props
