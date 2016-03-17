@@ -1,7 +1,7 @@
 {
-  "name": "react-pizza-project",
+  "name": "bredcrumbz",
   "version": "1.0.0",
-  "description": "React pizza ordering project for DecodeMTL bootcamp",
+  "description": "Bredcrumbz, final project for DecodeMTL bootcamp",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
@@ -9,12 +9,12 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/ziad-saab/react-pizza-project/"
+    "url": "https://github.com/bredcrumbz/main"
   },
   "keywords": [
     "react"
   ],
-  "author": "Ziad Saab <ziad.saab@gmail.com>",
+  "author": "<hanna.nicol@gmail.com> & <nicjorgensen@yahoo.ca>",
   "license": "ISC",
   "dependencies": {
     "autoprefixer": "^6.3.3",
