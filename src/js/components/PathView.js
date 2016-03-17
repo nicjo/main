@@ -6,6 +6,7 @@ import {
   GoogleMapLoader, GoogleMap, Marker
 }
 from "react-google-maps";
+import styles from '../styles';
 
 //our variables
 import geolocation from '../geolocation'; 
@@ -174,6 +175,9 @@ export default React.createClass({
                     <GoogleMap
                       ref={(map) => {this._googleMapComponent = map; this.fitBounds(); }}
                       zoom={zoom}
+                      defaultOptions={{
+                        styles: styles,
+                      }}
                       >
                       <ToastContainer ref="container"
                         toastMessageFactory={ToastMessageFactory}

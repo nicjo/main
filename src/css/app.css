@@ -31,7 +31,7 @@ CREATE PAGE
 ////////////////*/
 
 .titleInput, .create, .homeButton {
-  background: rgba(228, 224, 224, 0.47);
+  /*background: rgba(228, 224, 224, 0.47);*/
   border: #000;
   border-radius: 4px;
   color: #515b61;
@@ -55,6 +55,7 @@ CREATE PAGE
     position: relative;
     overflow: hidden;
     transform: translateZ(0px);
+    background: rgba(228, 224, 224, 0.47);
 }
 
 .list {
@@ -181,7 +182,7 @@ VIEW PAGE
   display: flex;
   flex-direction: row;
   align-items: flex-start;
-  background: rgba(228, 224, 224, 0.47);
+  /*background: rgba(228, 224, 224, 0.47);*/
 }
 
 
@@ -205,6 +206,7 @@ VIEW PAGE
   /*flex-wrap: wrap;*/
   flex-direction: row;
   flex: 0 54px;
+  margin: 0.5em;
 }
 
 
@@ -212,7 +214,7 @@ VIEW PAGE
 .itemButton, .nextButton, .startButton, .locate, .homeBut, .createButton {
   font-size: 1.3em;
   font-family: 'Roboto', 'Helvetica', sans-serif;
-  padding: 10px;
+  padding: 0.5em;
   z-index: 100;
   border: none;
   border-radius: 4px;
