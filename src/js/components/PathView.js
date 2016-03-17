@@ -33,15 +33,15 @@ export default React.createClass({
       request.get('/paths/' + id)
       .end((err, response) => {
         
-        response.body.points.forEach(function(point) {
-          point.lat = point.latitude;
-          point.lng = point.longitude;
-        
+        // response.body.points.forEach(function(point) {
+        //   point.lat = point.latitude;
+        //   point.lng = point.longitude;
+        // console.log(response.body)
         this.setState({
           path: response.body
         });
         
-      });
+      // });
       
     });
     },
@@ -54,7 +54,7 @@ export default React.createClass({
     var bounds = new google.maps.LatLngBounds();
     this.state.path.points.forEach(
       function(point) {
-        bounds.extend(new google.maps.LatLng(point.lat, point.lng));
+        bounds.extend(new google.maps.LatLng(point.latitude, point.longitude));
       }
     );
     this._googleMapComponent.fitBounds(bounds);
@@ -77,7 +77,7 @@ export default React.createClass({
   handleMarkerClick: function(e) {
     console.log()
     var txt = this.state.path.points[e].message;
-      if (txt !==  undefined){
+      if (txt !==  null){
       // console.log('Oh, Hello');
       this.refs.container.info(
       txt,
@@ -92,7 +92,10 @@ export default React.createClass({
   //this will 'start' the map by centering on the first marker and changing its colour
   handleStartButton: function(e) {
     console.log(this.state.path.points[0])
-    this._googleMapComponent.panTo(this.state.path.points[0]);
+    this._googleMapComponent.panTo({
+        lat: this.state.path.points[0].latitude,
+        lng: this.state.path.points[0].longitude
+      });
     this.setState({
       started: true,
       current: 0,
@@ -117,14 +120,16 @@ export default React.createClass({
         current: undefined
       });
     } else {
-      this._googleMapComponent.panTo(this.state.path.points[this.state.current + 1]);
+      this._googleMapComponent.panTo({
+        lat: this.state.path.points[this.state.current + 1].latitude,
+        lng: this.state.path.points[this.state.current + 1].longitude
+      });
     this.setState({
       zoom: 20,
       current: this.state.current + 1
     })
     }
   },
-  
   
     render: function() {
       
@@ -140,11 +145,9 @@ export default React.createClass({
     
     var center = this.state.center;
 
-    var image = '/images/puffin-marker_44x64.png';
-    var image2 = '/images/NyanCat.gif';
-    var image3 = '/images/bread-cat-72px.png';
-
-
+    var defaultImage = '/images/puffin-marker_44x64_default.png';
+    var infoImage = '/images/puffin-marker_44x64_info.png';
+    var visitedImage = '/images/puffin-marker_44x64_visited.png';
 
       return (
         <div className="map_div" >
@@ -178,9 +181,9 @@ export default React.createClass({
                           <Marker
                             onClick={this.handleMarkerClick.bind(this, i)}
                             key={i}
-                            position={{ lat: soloMarker.lat, lng: soloMarker.lng }}
+                            position={{ lat: soloMarker.latitude, lng: soloMarker.longitude }}
                             title={i.toString()}
-                            icon={(isFinite(this.state.current) ? this.state.current : -1) >= i ? image2 : soloMarker.text ? image3 : image}
+                            icon={(isFinite(this.state.current) ? this.state.current : -1) >= i ? visitedImage : soloMarker.message ? infoImage : defaultImage}
                           />
                         ))
                       }
