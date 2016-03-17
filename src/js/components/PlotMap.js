@@ -12,6 +12,8 @@ import geolocation from '../geolocation'
 
 import styles from '../styles';
 
+import EventEmitter from '../event-emitter';
+
 /*var Main = React.createClass({
   render: function() {
     return (
@@ -77,10 +79,9 @@ export default React.createClass({
   },
   
   render: function() {
-    var markerImage = new google.maps.MarkerImage('../icons/Bags_of_Breadcrumbs-icon.png',
-                    new google.maps.Size(50, 25),
-                    new google.maps.Point(0, 0),
-                    new google.maps.Point(25, 12.5));
+    var markerImage = new google.maps.MarkerImage('../images/puffin-marker.png',
+                    new google.maps.Size(64, 93),
+                    new google.maps.Point(0, 0));
                     
     return ( < GoogleMapLoader containerElement = { < div {...this.props
         }
@@ -111,10 +112,11 @@ export default React.createClass({
               return (
                 <Marker
                   {...crumb}
-                  animation= 'google.maps.Animation.DROP'
+                  //animation= {google.maps.Animation.DROP} * was making multiple markers drop (again)
+                  draggable={true}
                   icon= {markerImage}
-                  onClick={this.props.onCrumbClick.bind(null, index)} //.bind(this, index) now passed to onRightclick call
-                  onTouchTap={this.props.handleTouchTap}
+                  onClick={() => EventEmitter.dispatch('markerClick', index)}
+                  size= {60,60}
                 />
               );
             })}
