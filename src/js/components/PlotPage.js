@@ -1,17 +1,6 @@
 //dependencies
 
-var EventEmitter = {
-    _events: {},
-    dispatch: function (event, data) {
-        if (!this._events[event]) return; // no one is listening to this event
-        for (var i = 0; i < this._events[event].length; i++)
-            this._events[event][i](data);
-    },
-    subscribe: function (event, callback) {
-      if (!this._events[event]) this._events[event] = []; // new event
-      this._events[event].push(callback);
-    }
-}
+import EventEmitter from '../event-emitter';
 
 import React from "react";
 import {browserHistory} from "react-router";
@@ -24,7 +13,7 @@ injectTapEventPlugin();
 //Child Components
 import PlotMap from "./PlotMap";
 
-import {CreateMenu, EditMenu, MenuItem} from "./CrumbMenu"
+import {CreateMenu} from "./CrumbMenu"
 
 export default React.createClass({
 
@@ -33,8 +22,23 @@ export default React.createClass({
      title: 'untitled',
      crumbs: [],
      center: {},
-     message: '' //will be added to a marker (crumb)
    }
+  },
+  componentDidMount: function() {
+    EventEmitter.subscribe('deleteCrumb', this.deleteCrumb);
+    EventEmitter.subscribe('addMessage', this.addMessage);
+  },
+  deleteCrumb: function(index) {
+    console.log('delete', index);
+    this.state.crumbs.splice(index, 1);
+    this.forceUpdate();
+  },
+  addMessage: function(index) {
+    console.log('addText', index);
+    var currentMessage = this.state.crumbs[index].txt || "Watch out for the trap door beneath you!";
+    var message = prompt("Leave a secret instruction", currentMessage);
+    this.state.crumbs[index].txt = message;
+    this.forceUpdate();
   },
   handleKey: function(e) {
     var formtitle = 'untitled'
@@ -101,11 +105,7 @@ export default React.createClass({
     }
     
   },
-  handleCrumbClick: function(i) {
-    
-    
-    EventEmitter.dispatch('markerClick',i);
-
+  ___JUSTTOHAVECODEAVAILABLE: function() {
     
    // console.log(this.refs.createMenu)
     //console.log(this.refs.createMenu.refs.edit);
@@ -116,33 +116,33 @@ export default React.createClass({
     //by setting state for menu display:false > true?
     this.state.crumbs[i].txt = message;
     this.forceUpdate();*/
-    /*var crumbs = this.state.crumbs;
+    // var crumbs = this.state.crumbs;
   
-    crumbs.splice(i,1);
-    this.setState({crumbs:crumbs, message: message});
-    *///console.log(this.state);
-    /*let {
-      crumbs
-    } = this.state;*/
-    /*crumbs = update(crumbs, {
-      $splice: [
-        [i, 1],
-      ],
-    });
-    this.setState({
-      crumbs
-    });*/
+    // crumbs.splice(i,1);
+    // this.setState({crumbs:crumbs, message: message});
+    // console.log(this.state);
+    // let {
+    //   crumbs
+    // } = this.state;
+    // crumbs = update(crumbs, {
+    //   $splice: [
+    //     [i, 1],
+    //   ],
+    // });
+    // this.setState({
+    //   crumbs
+    // });
     //state to dislay the menu
   },
 
   render: function() {
     return (
       <div className="plotPage">
-        <CreateMenu EventEmitter={EventEmitter} ref="createMenu"/>
+        <CreateMenu ref="createMenu"/>
         <form action="create">
           <input className= "titleInput" onKeyUp={this.handleKey} type="text" name="pathTitle" ref= "title" placeholder="Name your path"/>
         </form>
-       <PlotMap className= "map" center={this.state.center} crumbs={this.state.crumbs} onClick= {this.handleMapClick} onCrumbClick= {this.handleCrumbClick}/>
+       <PlotMap className= "map" center={this.state.center} crumbs={this.state.crumbs} onClick= {this.handleMapClick} />
        <button className="create" onClick={this.handleClick}>Leave a trail</button>
      </div>
     )
