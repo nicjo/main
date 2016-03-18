@@ -1,5 +1,9 @@
 var autoprefixer = require ("autoprefixer");
 var webpack = require("webpack");
+<<<<<<< HEAD
+=======
+
+>>>>>>> common/master
 module.exports = {
   entry: __dirname + '/src/js/app.js',
   output: {
@@ -28,3 +32,13 @@ module.exports = {
 }
 
 
+<<<<<<< HEAD
+=======
+// [
+//     autoprefixer ({
+//       path: ['./src/css']
+//     })
+    
+//     ]
+
+>>>>>>> common/master

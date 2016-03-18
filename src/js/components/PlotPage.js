@@ -26,18 +26,41 @@ export default React.createClass({
   componentDidMount: function() {
     EventEmitter.subscribe('deleteCrumb', this.deleteCrumb);
     EventEmitter.subscribe('addMessage', this.addMessage);
+    EventEmitter.subscribe('dragged', this.dragged);
   },
   deleteCrumb: function(index) {
-    console.log('delete', index);
+    //console.log('delete', index);
     this.state.crumbs.splice(index, 1);
     this.forceUpdate();
   },
   addMessage: function(index) {
-    console.log('addText', index);
-    var currentMessage = this.state.crumbs[index].txt || "Watch out for the trap door beneath you!";
-    var message = prompt("Leave a secret instruction", currentMessage);
+    //console.log('addText', index);
+    var currentMessage = this.state.crumbs[index].txt || "";
+    var message = prompt(
+      'Leave a secret instruction', 
+      currentMessage
+    );
     this.state.crumbs[index].txt = message;
     this.forceUpdate();
+    
+    /*$('#textarea').click(function(){
+    bootbox.prompt({
+        title: 'Enter Description',
+        placeholder: 'my placeholder',
+        value: 'remove this text to see the placeholder',
+        buttons: {
+            confirm: {
+                label: 'Submit'
+            }
+        },
+        callback: function(value){
+            value && alert('You have entered: ' + value);
+        }
+    });
+});*/
+    
+    
+    
   },
   handleKey: function(e) {
     var formtitle = 'untitled'
@@ -68,7 +91,24 @@ export default React.createClass({
       title: "untitled"
     })
   },
-
+  
+  clickMarker: function(i, value){
+    //console.log(i, value)
+    if(value === "false"){
+      this.state.crumbs[i].clicked = false
+    } else {
+        this.state.crumbs[i].clicked = true
+    }
+      this.forceUpdate()
+  },
+  
+  dragged: function (event){
+   console.log(event.index, event.position); 
+    this.state.crumbs[event.index].position.lat = event.position.lat;
+    this.state.crumbs[event.index].position.lng = event.position.lng;
+    this.forceUpdate();
+  },
+  
   handleMapClick: function(e) {
     // e.stopPropagation();
     
@@ -76,7 +116,7 @@ export default React.createClass({
  
       let {crumbs} = this.state ///ES6 destructuring === var crumbs = this.state.crumbs
     //in ES5->
-    crumbs.push({position: {lat: e.latLng.lat(), lng: e.latLng.lng()}, key: Date.now()})
+    crumbs.push({position: {lat: e.latLng.lat(), lng: e.latLng.lng()}, key: Date.now(), clicked: false})
     /*crumbs = update(crumbs, {
       $push: [{
         position: {
@@ -140,15 +180,11 @@ export default React.createClass({
     return (
       <div className="plotPage">
         <CreateMenu ref="createMenu"/>
-        <form action="create">
-          <input className= "titleInput" onKeyUp={this.handleKey} type="text" name="pathTitle" ref= "title" placeholder="Name your path"/>
-        </form>
-       <PlotMap className= "map" center={this.state.center} crumbs={this.state.crumbs} onClick= {this.handleMapClick} />
-       
-        <div id="buttonsDiv">
-              {/*<button className="locate" onClick={this.handleLocateButton} alt="Locate Me!"><i className="fa fa-location-arrow"></i></button>*/}
-              <button className="createButton" onClick={this.handleClick}>Leave a trail</button>
-              <Link className="homeLink" to="/"><button className="homeBut" alt="Home!" ><i className="fa fa-home"></i></button></Link>
+        <input autoComplete="off" className= "titleInput" onKeyUp={this.handleKey} type="text" maxLength='60' name="pathTitle" ref= "title" placeholder="Name your path"/>
+       <PlotMap className= "map" center={this.state.center} crumbs={this.state.crumbs} clickMarker={this.clickMarker} onClick= {this.handleMapClick} />
+       <div id="buttonsDiv">
+            <button className="createButton" onClick={this.handleClick}>Leave a trail</button>
+            <Link className="homeLink" to="/"><button className="homeBut" alt="Home!" ><i className="fa fa-home"></i></button></Link>
         </div>
      </div>
     )
