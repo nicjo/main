@@ -79,10 +79,12 @@ export default React.createClass({
   
   handleBoundsChanged: function() {
     var center = this._googleMapComponent.getCenter();
-    this.state.center = {
-      lat: center.lat(),
-      lng: center.lng()
-    };
+    if (center) {
+      this.state.center = {
+        lat: center.lat(),
+        lng: center.lng()
+      };      
+    }
   },
   
   menuMarker: function(i) {
