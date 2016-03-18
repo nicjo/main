@@ -163,19 +163,24 @@ CRUMB MENU
 .top_menu {
     position: relative;
     background-color: white;
-    background-image: url("../images/eggshell-white.jpg");
     border-radius: 2px 15px 15px 2px;
     box-shadow: 0 2px 5px rgba(0,0,0, 0.7);
     margin: 5vh 0 0 0;
-    padding-left: 5vw;
-    padding-right: 1vw;
-    font-size: 2em;
+    padding: 0.5em;
+    font-size: 1.5em;
     width: fit-content;
 }
 
 .menuItem {
-  cursor: pointer
-  
+  cursor: pointer;
+  padding: 0.5em;
+  margin: 0.5em;
+  background-color: silver;
+  border-radius: 4px;
+}
+
+.menuItem:hover:active {
+  background-color: #ee5500;
 }
 
 /*.menu {
@@ -399,11 +404,11 @@ HOME PAGE
 }
 
 .homeButton {
-    padding: 1.2em;
-    margin: 1em;
-    width: 30vw;
+    padding: 0.8em 1em;
+    margin-top: 0.5em;
+    /*width: 30vw;*/
     flex-grow: 1;
-    flex-basis: 100%;
+    /*flex-basis: 100%;*/
     box-shadow: 0.1em 0.2em 1em rgba(0, 0, 0, 0.3);
     background-color: #032D3F;
     font-family:  'Roboto', 'Helvetica', sans-serif;
@@ -425,18 +430,21 @@ HOME PAGE
   flex-wrap: wrap;
   flex-direction: column;
   justify-content: center;
-  flex-grow:1;
+  flex-grow:0;
+  padding: 0.5em;
   /*left:50%;*/
 }
 
 .emptyHP {
     /*height: 15vh;*/
-    flex-grow: 3;
-    padding: 5em 1em 0 1em;
+    flex-grow: 0;
+    padding-left: 3em;
+    padding-right: 3em;
 }
 
 .homeImage {
-  width: auto;
-  height: 100%;
+  width: 100%;
+  height: auto;
+
   /*min-width: 100px;*/
 }

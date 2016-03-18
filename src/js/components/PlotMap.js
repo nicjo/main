@@ -123,7 +123,7 @@ export default React.createClass({
   
   render: function(i) {
     var defaultImage = '/images/puffin-marker_44x64_default.png';
-    var menuImage = '/images/puffin-marker_44x64_info.png';
+    var menuImage = '/images/puffin-marker_44x64_info3.png';
     var img = defaultImage;
   
     

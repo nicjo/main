@@ -7,7 +7,7 @@ export default React.createClass({
       <div className="homePage">
         <div className="hPWhite">
           <div className="emptyHP">
-          <img className="homeImage" src="/images/puffin-logo-300x251.png"/>
+              <img className="homeImage" src="/images/puffin_logo_302x400.png"/>
           </div>
             <div className="homeButtonsDiv">
               <Link to="/create"><button className="homeButton"><i className="fa fa-map-marker"></i> Create a Path</button></Link>

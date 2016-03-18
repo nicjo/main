@@ -58,9 +58,9 @@ export const EditMenu = React.createClass({
                 {this.state.visible ?
                 <div key="menu" className="menu">
                     <div className="top_menu">
-                        <MenuItem onClick={() =>EventEmitter.dispatch('addMessage', this.state.index)}>Add Hint</MenuItem>
-                        <MenuItem onClick={() => EventEmitter.dispatch('deleteCrumb', this.state.index)}>Delete Crumb</MenuItem>
-                        <MenuItem>Close Menu</MenuItem>
+                        <MenuItem onClick={() =>EventEmitter.dispatch('addMessage', this.state.index)}><i className="fa fa-exclamation-circle"></i> Add Hint</MenuItem>
+                        <MenuItem onClick={() => EventEmitter.dispatch('deleteCrumb', this.state.index)}><i className="fa fa-trash"></i> Delete Crumb</MenuItem>
+                        <MenuItem><i className="fa fa-times-circle"></i> Close Menu</MenuItem>
                     </div>
                 </div> : null}
             </ReactCSSTransitionGroup>
