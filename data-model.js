@@ -32,7 +32,7 @@ var Point = db.define('point', {
 Path.hasMany(Point);
 
 
-db.sync({force:true}); //do once
+// db.sync({force:true}); //do once
 
 
 //db.sync({force:true}); // comment this line after the first run  reboot: {force:true}
