@@ -132,7 +132,7 @@ export default React.createClass({
                     new google.maps.Point(0, 0));
                     
                       var menuImage = new google.maps.MarkerImage(menuImage,
-                    new google.maps.Size(44, 64),
+                    new google.maps.Size(54, 70),
                     new google.maps.Point(0, 0));
                     
     return ( < GoogleMapLoader containerElement = { < div {...this.props
